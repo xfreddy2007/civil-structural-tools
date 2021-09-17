@@ -1,0 +1,32 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@import "./chrome-bug";
+@import "./fonts";
+@import "./mixin";
+
+// reset tailwindcss
+img, svg {
+  display: inline-block;
+  vertical-align: top;
+}
+
+*, *:focus, button:focus {
+  outline: 0;
+}
+
+html, body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}

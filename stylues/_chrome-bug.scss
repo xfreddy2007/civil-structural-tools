@@ -1,0 +1,7 @@
+/**
+  * Chrome bug since 2012
+  * To prevent a "pop" of content, you have to disable all transition until the page is done loading
+*/
+body.loading * {
+  transition: none !important;
+}
