@@ -1,5 +1,4 @@
 const path = require('path');
-const getNextConfigENV = require('./internal/getNextConfigENV');
 const {
   dependencies: deps,
 } = require('./package.json');
@@ -13,7 +12,6 @@ module.exports = {
     DEV_MODE: ID_DEV_MODE,
     APP_ENV: process.env.APP_ENV,
     APP_ENV_PRODUCTION: ID_APP_ENV_PRODUCTION,
-    ...getNextConfigENV(),
   },
 
   webpack: (config, options) => {
@@ -24,6 +22,7 @@ module.exports = {
         'url-loader',
       ],
     });
+    return config;
   },
   sassOptions: {
     includePaths: [path.join(__dirname, 'stylues')],
