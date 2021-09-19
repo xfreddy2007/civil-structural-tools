@@ -1,5 +1,10 @@
 import Head from 'next/head'
 import Image from 'next/image'
+import { css, cx } from '@emotion/css';
+
+const rootStyle = css`
+  font-size: 48px;
+`;
 
 export default function Home() {
   return (
@@ -9,8 +14,9 @@ export default function Home() {
         <meta name="description" content="Tools for Civil Engineers who need calculation for designs" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="font-bold">
-        civil structural tools
+      <main className={cx('font-bold', rootStyle)}>
+        <h1>civil structural tools</h1>
+        <h2>土木結構計算工具</h2>
       </main>
     </div>
   )
