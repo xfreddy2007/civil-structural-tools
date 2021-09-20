@@ -15,9 +15,6 @@ const rootStyle = css`
     transform-origin: center;
     transform: scale(0);
   }
-  &[data-selected="true"]:after {
-    transform: scale(1);
-  }
   &:hover {
     &:after {
       transform: scale(1);
@@ -27,10 +24,9 @@ const rootStyle = css`
 
 type NavigationTabProps = React.HTMLAttributes<HTMLButtonElement> & {
   text: string,
-  selected: boolean,
 }
 const NavigationTab: React.FC<NavigationTabProps> = ({
-  text, selected, ...rest
+  text, ...rest
 }) => {
   return (
     <button
@@ -38,7 +34,6 @@ const NavigationTab: React.FC<NavigationTabProps> = ({
       {...rest}
     >
       <span
-        data-select={selected}
         className="uppercase font-bold whitespace-nowrap h-full px-8 text-base"
       >
         {text}

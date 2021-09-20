@@ -1,12 +1,16 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import { css, cx } from '@emotion/css';
+import { findRebarProperty, getRebarAreaPerMeter } from '@/libs/utils/rebar';
 
 const rootStyle = css`
   font-size: 48px;
 `;
 
 export default function Home() {
+  console.log(findRebarProperty('#50'));
+  console.log(getRebarAreaPerMeter('#8', '15'));
+
   return (
     <div>
       <Head>
