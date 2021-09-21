@@ -8,8 +8,8 @@ const rootStyle = css`
 `;
 
 export default function Home() {
-  console.log(findRebarProperty('#50'));
-  console.log(getRebarAreaPerMeter('#8', '15'));
+  // console.log(findRebarProperty('#50'));
+  // console.log(getRebarAreaPerMeter('#8', '15'));
 
   return (
     <div>

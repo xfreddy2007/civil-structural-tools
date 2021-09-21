@@ -37,6 +37,19 @@ const pageList:pageListProps[] = [
       },
     ],
   },
+  {
+    tab: '地震力設計',
+    pages: [
+      {
+        page: '地震力計算',
+        url: '/seismic-force',
+      }, 
+      {
+        page: '反應譜生成',
+        url: '/response-spectrum',
+      },
+    ],
+  },
 ];
 
 export default pageList;

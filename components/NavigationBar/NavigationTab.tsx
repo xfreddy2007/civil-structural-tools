@@ -1,6 +1,7 @@
 import React from 'react';
 import { css, cx } from '@emotion/css';
 import { md, xl } from '@/libs/utils/break-points';
+import { pageListProps } from '@/libs/utils/pageList';
 
 const rootStyle = css`
   &:after {
@@ -15,30 +16,50 @@ const rootStyle = css`
     transform-origin: center;
     transform: scale(0);
   }
-  &:hover {
-    &:after {
-      transform: scale(1);
+  ${xl} {
+    &:hover {
+      &:after {
+        transform: scale(1);
+      }
     }
   }
 `;
 
 type NavigationTabProps = React.HTMLAttributes<HTMLButtonElement> & {
   text: string,
+  subMenu?: pageListProps,
 }
 const NavigationTab: React.FC<NavigationTabProps> = ({
-  text, ...rest
+  text,
+  subMenu,
+  ...rest
 }) => {
   return (
-    <button
-      className={cx('cursor-pointer h-full relative', rootStyle)}
-      {...rest}
-    >
-      <span
-        className="uppercase font-bold whitespace-nowrap h-full px-8 text-base"
+    <div className="border-b border-solid border-green-200 py-4 xl:border-0 xl:py-0">
+      <button
+        className={cx('cursor-pointer h-full relative', rootStyle)}
+        {...rest}
       >
-        {text}
-      </span>
-    </button>
+        <span
+          className="uppercase font-bold whitespace-nowrap h-full px-8 text-base"
+        >
+          {text}
+        </span>
+      </button>
+      {subMenu && <div className="flex flex-col xl:hidden">
+        {subMenu.pages.map((menu) => {
+          return (
+            <a
+              key={menu.page}
+              href={menu.url}
+              className="py-2 block pl-10"
+            >
+              {menu.page}
+            </a>
+          );
+        })}
+      </div>}
+    </div>
   );
 };
 
