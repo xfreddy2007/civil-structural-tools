@@ -2,10 +2,15 @@ import React from 'react';
 import { css, cx } from '@emotion/css';
 import { md, xl } from '@/libs/utils/break-points';
 import FooterList from './FooterList';
+// @ts-ignore
 import { ReactComponent as FBIcon } from '@/assets/svg/facebook-icon.svg';
+// @ts-ignore
 import { ReactComponent as IGIcon } from '@/assets/svg/instagram-icon.svg';
+// @ts-ignore
 import { ReactComponent as GithubIcon } from '@/assets/svg/github-icon.svg';
+// @ts-ignore
 import { ReactComponent as LinkedInIcon } from '@/assets/svg/linkedin-icon.svg';
+// @ts-ignore
 import { ReactComponent as MailIcon } from '@/assets/svg/mail-icon.svg';
 
 const rootStyle = css`
