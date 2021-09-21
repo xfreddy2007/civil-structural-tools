@@ -4,7 +4,6 @@ import { css, cx } from '@emotion/css';
 import { md, xl } from '@/libs/utils/break-points';
 import NavigationTab from './NavigationTab';
 import NavigationList from './NavigationList';
-import pageList from '@/libs/utils/pageList';
 
 const rootStyle = css`
   height: 40px;
@@ -101,8 +100,8 @@ const NavigationBar: React.FC = () => {
             />
             <NavigationTab
               text="地震力設計"
-              onClick={() => setTab(1)}
-              onMouseOver={() => setTab(1)}
+              onClick={() => setTab(3)}
+              onMouseOver={() => setTab(3)}
             />
           </div>
         </nav>
@@ -115,7 +114,7 @@ const NavigationBar: React.FC = () => {
           setOpen={setOpen}
         />
       </header>
-      <div className="w-screen h-screen bg-transparent z-10" ref={navModalRef} onClick={subMenuModalHandler}/>
+      <div className="w-screen h-screen bg-transparent absolute z-10" ref={navModalRef} onClick={subMenuModalHandler}/>
     </>
   );
 };
