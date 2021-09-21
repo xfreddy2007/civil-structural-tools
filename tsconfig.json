@@ -3,6 +3,7 @@
     "baseUrl": ".",
     "target": "esnext",
     "lib": [
+      "ES7",
       "dom",
       "dom.iterable",
       "esnext"
@@ -20,17 +21,19 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    "jsxImportSource": "@emotion/react",
     "paths": {
       "@/*": ["./*"],
     }
   },
   "include": [
-    "next-env.d.ts",
+    "custom-next-env.d.ts",
     "window.d.ts",
     "**/*.ts",
     "**/*.tsx"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "next-env.d.ts"
   ]
 }

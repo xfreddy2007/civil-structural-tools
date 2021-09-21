@@ -1,6 +1,10 @@
-/assets/js/bundle.js
-/assets/js/jquery-3.2.1.min.js
-/assets/dist
+# Dependency directories
+/node_modules
+
+# NextJS Files
+/build
+/public/*
+/.next
+next-env.d.ts
 !.eslintrc.json
 !.storybook
-dist

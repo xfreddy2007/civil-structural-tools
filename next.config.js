@@ -14,7 +14,7 @@ module.exports = {
     APP_ENV_PRODUCTION: ID_APP_ENV_PRODUCTION,
   },
 
-  webpack: (config, options) => {
+  webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/,
       use: [
