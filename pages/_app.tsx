@@ -7,11 +7,11 @@ import Footer from '@/components/Footer';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <main className="min-h-screen relative flex flex-col">
       <NavigationBar />
       <Component {...pageProps} />
       <Footer />
-    </>
+    </main>
   );
 }
 
