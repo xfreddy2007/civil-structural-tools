@@ -23,13 +23,13 @@ const rootStyle = css`
     height: 100%;
   }
   .contact-info {
-    width: 300px;
+    width: 320px;
   }
 `;
 
 const Footer:React.FC = () => {
   return (
-    <footer className={cx('bg-green-900 text-white text-base w-full flex items-center flex-col md:flex-row', rootStyle)}>
+    <footer className={cx('bg-green-900 text-white w-full flex items-center flex-col md:flex-row', rootStyle)}>
       <FooterList />
       <div className="contact-info md:mr-8">
         <div className="flex justify-center space-x-4 py-8">

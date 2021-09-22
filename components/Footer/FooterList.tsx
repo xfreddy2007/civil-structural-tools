@@ -20,7 +20,7 @@ const List:React.FC<listProps> = ({
 }) => {
   return (
     <div className="footer-list py-4 px-4 md:px-8">
-      <h4 className="font-bold text-lg block py-4">{title}</h4>
+      <p className="font-bold block py-4">{title}</p>
       <div className="flex flex-col text-base">
         {tabs.map((tab) => {
           return (
@@ -42,7 +42,7 @@ const List:React.FC<listProps> = ({
 
 const FooterList:React.FC = () => {
   return (
-    <div className={cx('flex flex-1 px-2 md:px-8', rootStyle)}>
+    <div className={cx('flex flex-1 px-2 md:px-4 xl:px-8', rootStyle)}>
       {footerList.map((list) => {
         return <List key={list.title} {...list}/>
       })}
