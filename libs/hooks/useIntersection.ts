@@ -1,4 +1,3 @@
-import { type } from 'os';
 import React, { useState, useEffect, useRef } from 'react';
 
 // https://betterprogramming.pub/lazy-loading-images-with-intersection-observer-in-react-ad6135f1ca59
@@ -9,7 +8,7 @@ type IntersectionEntry = {
 }
 
 const listenerCallbacks = new WeakMap<Element, IntersectionEntry>();
-
+let observer:IntersectionObserver;
 function handleIntersections (entries:IntersectionObserverEntry[]) {
   entries.forEach((entry:IntersectionObserverEntry) => {
     if (listenerCallbacks.has(entry.target)) {
@@ -26,8 +25,6 @@ function handleIntersections (entries:IntersectionObserverEntry[]) {
     }
   });
 };
-
-let observer:IntersectionObserver;
 function getIntersectionObserver(): IntersectionObserver | null {
   if (typeof IntersectionObserver !== 'function') {
     return null;

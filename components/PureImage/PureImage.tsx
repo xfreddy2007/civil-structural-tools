@@ -12,7 +12,7 @@ export type PureImageProps = JSX.IntrinsicElements['img'] & {
 
 const PureImage: React.FC<PureImageProps> = (props) => {
   const {
-    className,
+    className = '',
     src,
     alt,
     onImageLoaded,

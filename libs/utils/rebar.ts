@@ -100,12 +100,12 @@ export const findRebarProperty = (size:string) => {
 };
 
 // to fix .toFixed and Math.round methods not rounding correctly, impl custom rounding
-const roundToDigit = (num:number, digit:number) => {
+const roundToDigit = (num:number, digit:number):number => {
   // @ts-ignore
   return +(Math.round(num + `e+${digit}`) + `e-${digit}`);
 }
 
-export const getRebarAreaPerMeter = (size:string, spacing:string) => {
+export const getRebarAreaPerMeter = (size:string, spacing:string):string => {
   const bar = rebar.find(i => i.id === size || i.size === size);
   if (typeof bar === 'undefined') {
     return '請輸入正確的鋼筋規格';
