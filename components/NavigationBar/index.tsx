@@ -114,7 +114,7 @@ const NavigationBar: React.FC = () => {
           setOpen={setOpen}
         />
       </header>
-      <div className="w-screen h-screen bg-transparent absolute z-10" ref={navModalRef} onClick={subMenuModalHandler}/>
+      <div className="w-screen h-screen fixed bg-transparent z-10" ref={navModalRef} onClick={subMenuModalHandler}/>
     </>
   );
 };

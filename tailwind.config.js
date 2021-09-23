@@ -78,14 +78,15 @@ module.exports = {
           }
         },
         'p': {
-          'font-size': '1rem',
-          'line-height': '1.5rem',
+          'font-size': '0.75rem',
+          'line-height': '1rem',
           '@media screen and (min-width: 768px)': {
-            'font-size': '1.125rem',
-            'line-height': '1.75rem',
+            'font-size': '0.875rem',
+            'line-height': '1.25rem',
           },
           '@media screen and (min-width: 1280px)': {
-            'font-size': '1.25rem',
+            'font-size': '1rem',
+            'line-height': '1.5rem',
           }
         },
       })
