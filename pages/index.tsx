@@ -1,11 +1,6 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import { css, cx } from '@emotion/css';
 import Main from '@/components/Home/Main';
-
-const rootStyle = css`
-  font-size: 48px;
-`;
+import Author from '@/components/Home/Author';
 
 export default function Home() {
 
@@ -17,6 +12,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Main />
+      <Author />
     </div>
   )
 }
