@@ -100,7 +100,7 @@ const rootStyle = css`
 const Main:React.FC = () => {
   return (
     <div className={cx('font-bold flex flex-col justify-center items-center h-full pt-16 md:pt-20 xl:pt-24 text-center', rootStyle)}>
-      <h1 className="mb-2 md:mb-4 xl:mb-6">Civil & Structural Tools</h1>
+      <h1 className="mb-2 md:mb-4 xl:mb-6 font-robot">Civil & Structural Tools</h1>
       <h2>土木結構計算工具</h2>
       <div className="home-banner-one flex space-x-4 w-full py-4 md:py-8 xl:py-12 pl-4 md:pl-8 lg:pl-16 xl:pl-48 mt-4 md:mt-8 xl:mt-12 text-white items-center">
         <div className="home-banner-one__context relative">

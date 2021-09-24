@@ -16,7 +16,7 @@ module.exports = {
   plugins: [
     require('@tailwindcss/aspect-ratio'),
     require('@tailwindcss/forms'),
-    plugin(function({ addBase, theme }) {
+    plugin(function({ addBase, addComponents, }) {
       addBase({
         'h1': {
           'font-size': '1.875rem',
@@ -89,7 +89,12 @@ module.exports = {
             'line-height': '1.5rem',
           }
         },
-      })
+      });
+      addComponents({
+        // font
+        '.font-robot': {'font-family': '\'Roboto\', \'Helvetica Neue\', Arial, san-serif'},
+        '.font-arial': {'font-family': 'Arial, Helvetica, san-serif'},
+      });
     })
   ],
 }
