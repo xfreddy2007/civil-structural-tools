@@ -7,6 +7,8 @@
  * area: cm^2
  */
 
+import { roundToDigit } from './otherUtils';
+
 const rebar = [
   {
     id: '#3',
@@ -98,12 +100,6 @@ export const findRebarProperty = (size:string) => {
     area: bar?.area,
   };
 };
-
-// to fix .toFixed and Math.round methods not rounding correctly, impl custom rounding
-const roundToDigit = (num:number, digit:number):number => {
-  // @ts-ignore
-  return +(Math.round(num + `e+${digit}`) + `e-${digit}`);
-}
 
 export const getRebarAreaPerMeter = (size:string, spacing:string):string => {
   const bar = rebar.find(i => i.id === size || i.size === size);
