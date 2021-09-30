@@ -2,8 +2,12 @@ import Head from 'next/head';
 import Main from '@/components/Home/Main';
 import Author from '@/components/Home/Author';
 
-export default function Home() {
+import { findRebarProperty } from '@/libs/utils/rebar';
+import { getMinimumBeamWidth } from '@/libs/utils/concrete';
 
+export default function Home() {
+  // console.log(findRebarProperty('#3'));
+  // console.log(getMinimumBeamWidth('D57', 'D16' ,'10'));
   return (
     <div className="flex-1">
       <Head>

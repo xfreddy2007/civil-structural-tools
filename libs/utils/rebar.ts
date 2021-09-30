@@ -9,79 +9,97 @@
 
 import { roundToDigit } from './otherUtils';
 
+// rebar mapping
+export type rebarSpec = '#3'|'#4'|'#5'|'#6'|'#7'|'#8'|'#9'|'#10'|'#11'|'#14'|'#18'|'D10'|'D13'|'D16'|'D19'|'D22'|'D25'|'D29'|'D32'|'D36'|'D43'|'D57'; 
+export type mainRebarSpec = 'D10'|'D13'|'D16'|'D19'|'D22'|'D25'|'D29'|'D32'|'D36'|'D43'|'D57';
+export type stirrupRebarSpec = 'D10'|'D13'|'D16';
+const rebarMapping = {
+  '#3': 'D10',
+  '#4': 'D13',
+  '#5': 'D16',
+  '#6': 'D19',
+  '#7': 'D22',
+  '#8': 'D25',
+  '#9': 'D29',
+  '#10': 'D32',
+  '#11': 'D36',
+  '#14': 'D43',
+  '#18': 'D57',
+  'D10': 'D10',
+  'D13': 'D13',
+  'D16': 'D16',
+  'D19': 'D19',
+  'D22': 'D22',
+  'D25': 'D25',
+  'D29': 'D29',
+  'D32': 'D32',
+  'D36': 'D36',
+  'D43': 'D43',
+  'D57': 'D57',
+};
+// rebar property
 const rebar = [
   {
-    id: '#3',
     size: 'D10',
     unitWeight: 0.56,
     diameter: 0.953,
     area: 0.7133,
   },
   {
-    id: '#4',
     size: 'D13',
     unitWeight: 0.994,
     diameter: 1.27,
     area: 1.267,
   },
   {
-    id: '#5',
     size: 'D16',
     unitWeight: 1.56,
     diameter: 1.59,
     area: 1.986,
   },
   {
-    id: '#6',
     size: 'D19',
     unitWeight: 2.25,
     diameter: 1.91,
     area: 2.865,
   },
   {
-    id: '#7',
     size: 'D22',
     unitWeight: 3.04,
     diameter: 2.22,
     area: 3.871,
   },
   {
-    id: '#8',
     size: 'D25',
     unitWeight: 3.98,
     diameter: 2.54,
     area: 5.067,
   },
   {
-    id: '#9',
     size: 'D29',
     unitWeight: 5.08,
     diameter: 2.87,
     area: 6.469,
   },
   {
-    id: '#10',
     size: 'D32',
     unitWeight: 6.39,
     diameter: 3.22,
     area: 8.143,
   },
   {
-    id: '#11',
     size: 'D36',
     unitWeight: 7.9,
     diameter: 3.58,
     area: 10.07,
   },
   {
-    id: '#14',
     size: 'D43',
     unitWeight: 11.4,
     diameter: 4.3,
     area: 14.52,
   },
   {
-    id: '#18',
     size: 'D57',
     unitWeight: 20.2,
     diameter: 5.73,
@@ -89,11 +107,10 @@ const rebar = [
   },
 ];
 
-export const findRebarProperty = (size:string) => {
-  const bar = rebar.find(i => i.id === size || i.size === size);
+export const findRebarProperty = (size:rebarSpec) => {
+  const bar = rebar.find(i => i.size === rebarMapping[size]);
   if (typeof bar === 'undefined') return '請輸入正確的鋼筋規格';
   return {
-    id: bar?.id,
     size: bar?.size,
     unitWeight: bar?.unitWeight,
     diameter: bar?.diameter,
@@ -101,8 +118,8 @@ export const findRebarProperty = (size:string) => {
   };
 };
 
-export const getRebarAreaPerMeter = (size:string, spacing:string):string => {
-  const bar = rebar.find(i => i.id === size || i.size === size);
+export const getRebarAreaPerMeter = (size:rebarSpec, spacing:string):string => {
+  const bar = rebar.find(i => i.size === rebarMapping[size]);
   if (typeof bar === 'undefined') {
     return '請輸入正確的鋼筋規格';
   } else {
