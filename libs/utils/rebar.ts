@@ -13,7 +13,7 @@ import { roundToDigit } from './otherUtils';
 export type rebarSpec = '#3'|'#4'|'#5'|'#6'|'#7'|'#8'|'#9'|'#10'|'#11'|'#14'|'#18'|'D10'|'D13'|'D16'|'D19'|'D22'|'D25'|'D29'|'D32'|'D36'|'D43'|'D57'; 
 export type mainRebarSpec = 'D10'|'D13'|'D16'|'D19'|'D22'|'D25'|'D29'|'D32'|'D36'|'D43'|'D57';
 export type stirrupRebarSpec = 'D10'|'D13'|'D16';
-const rebarMapping = {
+export const rebarMapping = {
   '#3': 'D10',
   '#4': 'D13',
   '#5': 'D16',
@@ -108,22 +108,19 @@ const rebar = [
 ];
 
 export const findRebarProperty = (size:rebarSpec) => {
+  if (Object.keys(rebarMapping).findIndex(i => i === size) < 0) return;
   const bar = rebar.find(i => i.size === rebarMapping[size]);
-  if (typeof bar === 'undefined') return '請輸入正確的鋼筋規格';
   return {
-    size: bar?.size,
-    unitWeight: bar?.unitWeight,
-    diameter: bar?.diameter,
-    area: bar?.area,
+    size: bar!.size,
+    unitWeight: bar!.unitWeight,
+    diameter: bar!.diameter,
+    area: bar!.area,
   };
 };
 
-export const getRebarAreaPerMeter = (size:rebarSpec, spacing:string):string => {
+export const getRebarAreaPerMeter = (size:rebarSpec, spacing:string) => {
+  if (Object.keys(rebarMapping).findIndex(i => i === size) < 0) return;
   const bar = rebar.find(i => i.size === rebarMapping[size]);
-  if (typeof bar === 'undefined') {
-    return '請輸入正確的鋼筋規格';
-  } else {
-    const areaPerMeter = roundToDigit(bar.area * 100 / (+spacing), 2);
-    return `${areaPerMeter} cm^2/m`;
-  }
+  const areaPerMeter = roundToDigit(bar!.area * 100 / (+spacing), 2);
+  return `${areaPerMeter} cm^2/m`;
 }
