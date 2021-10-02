@@ -4,19 +4,25 @@ import { md, lg, xl } from '@/libs/utils/break-points';
 import Input from '../Input';
 import { singleLayerMnStrengthCalculation } from '@/libs/utils/concrete';
 import { findRebarProperty, rebarSpec } from '@/libs/utils/rebar';
+import validate from 'validate.js';
+import { constraints } from './constraint'
 
 const rootStyle = css``;
 
-type formDataProps = null | {
-  width: number,
-  effectiveDepth: number,
-  designMoment: number,
-  mainRebarNum: number,
-  mainRebarSpec: rebarSpec,
+type formDataProps = {
+  width?: number,
+  effectiveDepth?: number,
+  designMoment?: number,
+  mainRebarNum?: number,
+  mainRebarSpec?: rebarSpec,
 };
 
+const validationCheck = (form:formDataProps) => {
+  const errors = validate(form, constraints);
+}
+
 const CapacityCheck:React.FC = () => {
-  const [formData, setFormData] = useState<formDataProps>(null);
+  const [formData, setFormData] = useState<formDataProps>({});
   const handleSubmitform = (e: any) => {
     e.preventDefault();
     const data = {
@@ -30,16 +36,16 @@ const CapacityCheck:React.FC = () => {
   };
   useEffect(() => {
     console.log(formData);
-    if (formData) {
-      const area = findRebarProperty(formData.mainRebarSpec);
-      console.log(singleLayerMnStrengthCalculation(
-        formData.width,
-        formData.effectiveDepth,
-        280,
-        4200,
-        formData.mainRebarNum * area!.area
-      ));
-    }
+    // if (formData) {
+    //   const area = findRebarProperty(formData.mainRebarSpec);
+    //   console.log(singleLayerMnStrengthCalculation(
+    //     formData.width,
+    //     formData.effectiveDepth,
+    //     280,
+    //     4200,
+    //     formData.mainRebarNum * area!.area
+    //   ));
+    // }
 
   }, [formData]);
 
