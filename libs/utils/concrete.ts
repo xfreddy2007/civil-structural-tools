@@ -7,7 +7,6 @@
 
 import { findRebarProperty, mainRebarSpec, stirrupRebarSpec } from './rebar';
 import { roundToDigit } from './otherUtils';
-import { type } from 'os';
 
 // beta param calculation
 const getBetaParam = (strength:number):number => {
@@ -21,6 +20,7 @@ const getBetaParam = (strength:number):number => {
 };
 // get f'c, young's Modulus, & beta param function 
 // from 140 to 560
+export const concreteStrengthList = [140, 210, 280, 350, 420, 490, 560];
 type concreteProps = {
   strength: number;
   unitWeight: number;

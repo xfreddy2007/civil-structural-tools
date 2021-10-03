@@ -37,6 +37,9 @@ export const rebarMapping = {
   'D43': 'D43',
   'D57': 'D57',
 };
+
+// rebar yield strength
+export const rebarYieldStrength = [2800, 4200];
 // rebar property
 const rebar = [
   {
