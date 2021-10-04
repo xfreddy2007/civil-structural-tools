@@ -1,68 +1,68 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { css, cx } from '@emotion/css';
 import { md, lg, xl } from '@/libs/utils/break-points';
 import Input from '../Input';
-import { singleLayerMnStrengthCalculation } from '@/libs/utils/concrete';
+import { singleLayerMnStrengthCalculation, resultDataProps } from '@/libs/utils/concrete';
 import { findRebarProperty, rebarSpec } from '@/libs/utils/rebar';
 import validate from 'validate.js';
-// import { createErrorMessage } from '@/libs/utils/validationCheck';
-import { constraints } from './constraint'
+import { constraints } from './constraint';
+import ResultSection from './ResultSection';
 
 const rootStyle = css``;
 
-type formDataProps = {
-  width?: number,
-  effectiveDepth?: number,
-  designMoment?: number,
-  mainRebarNum?: number,
-  mainRebarSpec?: rebarSpec,
+type formDataProps = null | {
+  '寬度': number,
+  '有效深度': number,
+  '混凝土抗壓強度': string,
+  '鋼筋降伏強度': string,
+  '設計彎矩': number,
+  '主筋數量': number,
+  '主筋號數': rebarSpec,
 };
 
-
-
-
 const CapacityCheck:React.FC = () => {
-  const [formData, setFormData] = useState<formDataProps>({});
+  const [formData, setFormData] = useState<formDataProps>(null);
   const [error, setError] = useState({});
+  const [result, setResult] = useState<resultDataProps>(null);
   
-  const inputErrorObserver = (e: any) => {
+  const inputErrorObserver = useCallback((e: any) => {
     const error = validate({[e.target.name]: e.target.value}, constraints) || {};
     setError(error[e.target.name]? {[e.target.name]: error[e.target.name]} : {});
-  };
-  const validationCheck = (form:formDataProps) => {
+  }, []);
+  const validationCheck = useCallback((form:formDataProps) => {
     const errors = validate(form, constraints);
     setError(errors || {});
-  }
+  }, []);
 
-  const handleSubmitform = (e: any) => {
+  const handleSubmitform = useCallback((e: any) => {
     e.preventDefault();
     const data = {
-      width: +e.target['寬度'].value,
-      effectiveDepth: +e.target['有效深度'].value,
-      concreteStrength: +e.target['混凝土抗壓強度'].value,
-      rebarStrength: +e.target['鋼筋降伏強度'].value,
-      designMoment: +e.target['設計彎矩'].value,
-      mainRebarNum: +e.target['主筋數量'].value,
-      mainRebarSpec: e.target['主筋號數'].value,
+      '寬度': +e.target['寬度'].value,
+      '有效深度': +e.target['有效深度'].value,
+      '混凝土抗壓強度': e.target['混凝土抗壓強度'].value,
+      '鋼筋降伏強度': e.target['鋼筋降伏強度'].value,
+      '設計彎矩': +e.target['設計彎矩'].value,
+      '主筋數量': +e.target['主筋數量'].value,
+      '主筋號數': e.target['主筋號數'].value,
     };
     validationCheck(data);
-    // setFormData(data);
-  };
+    if (!validate(data, constraints)) {
+      setFormData(data);
+    }
+  }, [validationCheck]);
 
   useEffect(() => {
-    // console.log(formData);
-    // if (formData) {
-    //   const area = findRebarProperty(formData.mainRebarSpec);
-    //   console.log(singleLayerMnStrengthCalculation(
-    //     formData.width,
-    //     formData.effectiveDepth,
-    //     280,
-    //     4200,
-    //     formData.mainRebarNum * area!.area
-    //   ));
-    // }
-
-  }, [formData]);
+    if (formData) {
+      const area = findRebarProperty(formData['主筋號數']);
+      setResult(singleLayerMnStrengthCalculation(
+        formData['寬度'],
+        formData['有效深度'],
+        Number(formData['混凝土抗壓強度']),
+        Number(formData['鋼筋降伏強度']),
+        formData['主筋數量'] * area!.area,
+      ));
+    }
+  }, [error, formData, result]);
 
   return (
     <div className={cx('w-full block', rootStyle)}>
@@ -136,6 +136,7 @@ const CapacityCheck:React.FC = () => {
         </div>
         <button type="submit" className="w-24 p-2 bg-green-900 text-white rounded-md hover:bg-green-700 cursor-pointer font-bold">檢核</button>
       </form>
+      {result && <ResultSection {...result}/>}
     </div>
   );
 };

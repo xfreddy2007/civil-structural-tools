@@ -20,7 +20,7 @@ const getBetaParam = (strength:number):number => {
 };
 // get f'c, young's Modulus, & beta param function 
 // from 140 to 560
-export const concreteStrengthList = [140, 210, 280, 350, 420, 490, 560];
+export const concreteStrengthList = ['140', '210', '280', '350', '420', '490', '560'];
 type concreteProps = {
   strength: number;
   unitWeight: number;
@@ -51,11 +51,25 @@ const getPhiParam = (et:number, ety:number, isSpiral:boolean = false):number => 
 };
 
 // get Mn
-export const singleLayerMnStrengthCalculation = (width:number, effectiveDepth:number, fc:number, fy:number, as:number):number => {
+export type resultDataProps = null | {
+  neuturalDepth: number,
+  alpha: number,
+  et: number,
+  neuturalMoment: number,
+  designMoment: number,
+};
+
+export const singleLayerMnStrengthCalculation = (width:number, effectiveDepth:number, fc:number, fy:number, as:number):resultDataProps => {
   const neuturalDepth = roundToDigit(as * fy / (0.85 * fc * getConcreteProperty(fc).beta * width), 2);
   const et = roundToDigit(0.003 * (effectiveDepth - neuturalDepth) / neuturalDepth, 4);
   const phi = getPhiParam(et, 0.005);
-  return roundToDigit(phi * as * fy * (effectiveDepth - 0.5 * 0.85 * neuturalDepth), 0); // kgf - cm
+  return {
+    neuturalDepth: neuturalDepth, // cm
+    alpha: roundToDigit(0.85 * getConcreteProperty(fc).beta, 2),
+    et: et,
+    neuturalMoment: roundToDigit(as * fy * (effectiveDepth - 0.5 * 0.85 * neuturalDepth) / 100000, 2), // tf - m
+    designMoment: roundToDigit(phi * as * fy * (effectiveDepth - 0.5 * 0.85 * neuturalDepth) / 100000, 2), // tf - m
+  }; 
 };
 
 export const doubleLayerMnStrengthCalculation = (width:number, effectiveDepth:number, effectiveDepthTop:number, fc:number, fy:number, as:number, asTop:number):number|string => {

@@ -12,6 +12,8 @@ export const constraints = {
     numericality: {
       strict: true,
       greaterThan: 0,
+      notValid: '必須是一個有效數字',
+      notGreaterThan: '必須大於0',
     },
   },
   '有效深度': {
@@ -22,6 +24,8 @@ export const constraints = {
     numericality: {
       strict: true,
       greaterThan: 0,
+      notValid: '必須是一個有效數字',
+      notGreaterThan: '必須大於0',
     },
   },
   '混凝土抗壓強度': {
@@ -31,6 +35,7 @@ export const constraints = {
     },
     numericality: {
       strict: true,
+      notValid: '必須是一個有效數字',
     },
     type: "concreteStrengthType",
   },
@@ -42,6 +47,7 @@ export const constraints = {
     numericality: {
       strict: true,
       greaterThan: 0,
+      notValid: '必須是一個有效數字',
     },
     type: "rebarYieldStrengthType",
   },
@@ -53,6 +59,8 @@ export const constraints = {
     numericality: {
       strict: true,
       greaterThan: 0,
+      notValid: '必須是一個有效數字',
+      notGreaterThan: '必須大於0',
     },
   },
   '主筋數量': {
@@ -64,6 +72,9 @@ export const constraints = {
       strict: true,
       onlyInteger: true,
       greaterThan: 0,
+      notValid: '必須是一個有效數字',
+      notGreaterThan: '必須大於0',
+      notInteger: '必須是一個正整數'
     },
   },
   '主筋號數': {
@@ -77,13 +88,13 @@ export const constraints = {
 
 // concreteStrengthType
 validate.validators.type.types.concreteStrengthType = function (value:string) {
-  return !(Object.keys(concreteStrengthList).findIndex(i => i === value) < 0); 
+  return !(concreteStrengthList.findIndex(i => i === value) < 0); 
 };
 validate.validators.type.messages.concreteStrengthType = "輸入不正確的規格，請輸入正確的混凝土抗壓強度";
 
 // rebarYieldStrengthType
 validate.validators.type.types.rebarYieldStrengthType = function (value:string) {
-  return !(Object.keys(rebarYieldStrength).findIndex(i => i === value) < 0); 
+  return !(rebarYieldStrength.findIndex(i => i === value) < 0); 
 };
 validate.validators.type.messages.rebarYieldStrengthType = "輸入不正確的規格，請輸入正確的鋼筋降伏強度";
 
