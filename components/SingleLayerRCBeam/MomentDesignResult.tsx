@@ -1,7 +1,7 @@
 import React from 'react';
 import { css, cx } from '@emotion/css';
 
-type ResultSectionProps = {
+type MomentDesignResultProps = {
   neuturalDepth?: number,
   alpha?: number,
   et?: number,
@@ -9,7 +9,7 @@ type ResultSectionProps = {
   designMoment?: number,
 };
 
-const ResultSection:React.FC<ResultSectionProps> = ({
+const MomentDesignResult:React.FC<MomentDesignResultProps> = ({
   neuturalDepth,
   alpha,
   et,
@@ -23,4 +23,4 @@ const ResultSection:React.FC<ResultSectionProps> = ({
   );
 };
 
-export default React.memo(ResultSection);
+export default React.memo(MomentDesignResult);

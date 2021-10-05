@@ -38,7 +38,7 @@ export const getConcreteProperty = (strength:number, isNormalWeight:boolean = tr
 };
 
 // phi param calcaulation function
-const getPhiParam = (et:number, ety:number, isSpiral:boolean = false):number => {
+export const getPhiParam = (et:number, ety:number, isSpiral:boolean = false):number => {
   if (!(roundToDigit(ety, 3) < roundToDigit(et, 3))) {
     return isSpiral ? 0.75 : 0.65;
   } else if (roundToDigit(et, 3) < roundToDigit(ety + 0.003, 3)) {
@@ -56,7 +56,7 @@ export type resultDataProps = null | {
   alpha: number,
   et: number,
   neuturalMoment: number,
-  designMoment: number,
+  requiredMoment: number,
 };
 
 export const singleLayerMnStrengthCalculation = (width:number, effectiveDepth:number, fc:number, fy:number, as:number):resultDataProps => {
@@ -68,7 +68,7 @@ export const singleLayerMnStrengthCalculation = (width:number, effectiveDepth:nu
     alpha: roundToDigit(0.85 * getConcreteProperty(fc).beta, 2),
     et: et,
     neuturalMoment: roundToDigit(as * fy * (effectiveDepth - 0.5 * 0.85 * neuturalDepth) / 100000, 2), // tf - m
-    designMoment: roundToDigit(phi * as * fy * (effectiveDepth - 0.5 * 0.85 * neuturalDepth) / 100000, 2), // tf - m
+    requiredMoment: roundToDigit(phi * as * fy * (effectiveDepth - 0.5 * 0.85 * neuturalDepth) / 100000, 2), // tf - m
   }; 
 };
 
