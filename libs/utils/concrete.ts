@@ -53,7 +53,6 @@ export const getPhiParam = (et:number, ety:number, isSpiral:boolean = false):num
 // get Mn
 export type resultDataProps = null | {
   neuturalDepth: number,
-  alpha: number,
   et: number,
   neuturalMoment: number,
   requiredMoment: number,
@@ -65,7 +64,6 @@ export const singleLayerMnStrengthCalculation = (width:number, effectiveDepth:nu
   const phi = getPhiParam(et, 0.005);
   return {
     neuturalDepth: neuturalDepth, // cm
-    alpha: roundToDigit(0.85 * getConcreteProperty(fc).beta, 2),
     et: et,
     neuturalMoment: roundToDigit(as * fy * (effectiveDepth - 0.5 * 0.85 * neuturalDepth) / 100000, 2), // tf - m
     requiredMoment: roundToDigit(phi * as * fy * (effectiveDepth - 0.5 * 0.85 * neuturalDepth) / 100000, 2), // tf - m

@@ -10,7 +10,7 @@ import CheckResult from './CheckResult';
 
 const rootStyle = css``;
 
-type formDataProps = {
+type momentFormDataProps = {
   '寬度'?: number,
   '有效深度'?: number,
   '混凝土抗壓強度'?: string,
@@ -21,7 +21,7 @@ type formDataProps = {
 };
 
 const MomentCapacityCheck:React.FC = () => {
-  const [formData, setFormData] = useState<formDataProps>({});
+  const [MomentformData, setMomentFormData] = useState<momentFormDataProps>({});
   const [error, setError] = useState({});
   const [result, setResult] = useState<resultDataProps>(null);
   
@@ -44,26 +44,26 @@ const MomentCapacityCheck:React.FC = () => {
     const errors = validate(data, constraints);
     setError(errors || {});
     if (!errors) {
-      setFormData(data);
+      setMomentFormData(data);
     } else {
-      setFormData({});
+      setMomentFormData({});
     }
   }, []);
 
   useEffect(() => {
-    if (Object.keys(formData).length > 0) {
-      const area = findRebarProperty(formData['主筋號數']!);
+    if (Object.keys(MomentformData).length > 0) {
+      const area = findRebarProperty(MomentformData['主筋號數']!);
       setResult(singleLayerMnStrengthCalculation(
-        formData['寬度']!,
-        formData['有效深度']!,
-        Number(formData['混凝土抗壓強度']!),
-        Number(formData['鋼筋降伏強度']!),
-        formData['主筋數量']! * area!.area,
+        MomentformData['寬度']!,
+        MomentformData['有效深度']!,
+        Number(MomentformData['混凝土抗壓強度']!),
+        Number(MomentformData['鋼筋降伏強度']!),
+        MomentformData['主筋數量']! * area!.area,
       ));
     } else {
       setResult(null);
     }
-  }, [formData]);
+  }, [MomentformData]);
 
   return (
     <div className={cx('w-full block', rootStyle)}>
@@ -135,16 +135,19 @@ const MomentCapacityCheck:React.FC = () => {
             />
           </div>
         </div>
-        <button type="submit" className="w-24 p-2 bg-green-900 text-white rounded-md hover:bg-green-700 cursor-pointer font-bold">檢核</button>
+        <div className="flex space-x-4">
+          <button type="submit" className="px-10 py-2 bg-green-900 text-white rounded-md hover:bg-green-700 cursor-pointer font-bold">檢核</button>
+          <input type="reset" className="px-10 py-2 bg-green-900 text-white rounded-md hover:bg-green-700 cursor-pointer font-bold" value="重設參數"/>
+        </div>
       </form>
       {result && <CheckResult
-        width={formData['寬度']}
-        effectiveDepth={formData['有效深度']}
-        concreteStrength={formData['混凝土抗壓強度']}
-        rebarStrength={formData['鋼筋降伏強度']}
-        mainRebarNum={formData['主筋數量']}
-        mainRebarSpec={formData['主筋號數']}
-        designMoment={formData['設計彎矩']}
+        width={MomentformData['寬度']}
+        effectiveDepth={MomentformData['有效深度']}
+        concreteStrength={MomentformData['混凝土抗壓強度']}
+        rebarStrength={MomentformData['鋼筋降伏強度']}
+        mainRebarNum={MomentformData['主筋數量']}
+        mainRebarSpec={MomentformData['主筋號數']}
+        designMoment={MomentformData['設計彎矩']}
         {...result}
       />}
     </div>
