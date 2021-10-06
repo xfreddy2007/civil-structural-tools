@@ -16,7 +16,7 @@ type momentCheckResultProps = {
   neuturalDepth?: number,
   alpha?: number,
   et?: number,
-  neuturalMoment?: number,
+  nominalMoment?: number,
   requiredMoment?: number,
 };
 
@@ -43,7 +43,7 @@ const MomentCheckResult:React.FC<momentCheckResultProps> = ({
   designMoment,
   neuturalDepth,
   et,
-  neuturalMoment,
+  nominalMoment,
   requiredMoment,
 }) => {
   // @ts-ignore
@@ -103,7 +103,7 @@ const MomentCheckResult:React.FC<momentCheckResultProps> = ({
             <li className="block">{`中性軸位置 x: As*Fy/(0.85*f'c*ß*b) = ${as}*${rebarStrength}/(0.85*${concreteStrength}*${getConcreteProperty(Number(concreteStrength)).beta}*${width}) ≈ ${neuturalDepth} cm`}</li>
             <li className="block">{`求出最外層鋼筋應變 εt: 0.003*(d-x)/x = 0.003*(${effectiveDepth}-${neuturalDepth})/${neuturalDepth} = ${et} ${etText}`}</li>
             <li className="block">{`求出折減係數 ϕ: ${phiText}`}</li>
-            <li className="block">{`此梁之設計彎矩 ϕMn = ϕ*As*Fy*(d-(0.85*x)/2) = ${roundToDigit(getPhiParam(et!, 0.005), 2)}*${as}*${rebarStrength}*(${effectiveDepth}-(0.85*${neuturalDepth})/2)/100000 ≈ ${roundToDigit(getPhiParam(et!, 0.005), 2)} * ${neuturalMoment} ≈ ${requiredMoment} tf - m`}</li>
+            <li className="block">{`此梁之設計彎矩 ϕMn = ϕ*As*Fy*(d-(0.85*x)/2) = ${roundToDigit(getPhiParam(et!, 0.005), 2)}*${as}*${rebarStrength}*(${effectiveDepth}-(0.85*${neuturalDepth})/2)/100000 ≈ ${roundToDigit(getPhiParam(et!, 0.005), 2)} * ${nominalMoment} ≈ ${requiredMoment} tf - m`}</li>
             <li className="block">{`此梁彎矩設計強度${momentText}`}</li>
           </ul>
         </p>

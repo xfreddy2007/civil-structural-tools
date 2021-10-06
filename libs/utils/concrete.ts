@@ -26,14 +26,24 @@ type concreteProps = {
   unitWeight: number;
   youngModulus: number;
   beta: number;
+  lambda: number;
 }
 
 export const getConcreteProperty = (strength:number, isNormalWeight:boolean = true, unitWeight:number = 2300):concreteProps => {
+  let lambda:number;
+  if (unitWeight > 2160) {
+    lambda = 1;
+  } else if (unitWeight > 1600) {
+    lambda = Math.min(roundToDigit(0.0075 * unitWeight, 2), 1);
+  } else {
+    lambda = 0.75;
+  }
   return {
     strength: strength, // kgf/cm^2
     unitWeight: isNormalWeight ? 2300 : unitWeight, // kg/m^3
     youngModulus: isNormalWeight ? roundToDigit(Math.sqrt(strength) * 12000, 0) : roundToDigit(Math.pow(unitWeight, 1.5) * 0.11 * Math.sqrt(strength), 0), // kgf/cm^2
     beta: getBetaParam(140),
+    lambda,
   };
 };
 
@@ -54,7 +64,7 @@ export const getPhiParam = (et:number, ety:number, isSpiral:boolean = false):num
 export type resultDataProps = null | {
   neuturalDepth: number,
   et: number,
-  neuturalMoment: number,
+  nominalMoment: number,
   requiredMoment: number,
 };
 
@@ -65,7 +75,7 @@ export const singleLayerMnStrengthCalculation = (width:number, effectiveDepth:nu
   return {
     neuturalDepth: neuturalDepth, // cm
     et: et,
-    neuturalMoment: roundToDigit(as * fy * (effectiveDepth - 0.5 * 0.85 * neuturalDepth) / 100000, 2), // tf - m
+    nominalMoment: roundToDigit(as * fy * (effectiveDepth - 0.5 * 0.85 * neuturalDepth) / 100000, 2), // tf - m
     requiredMoment: roundToDigit(phi * as * fy * (effectiveDepth - 0.5 * 0.85 * neuturalDepth) / 100000, 2), // tf - m
   }; 
 };
@@ -117,6 +127,69 @@ export const doubleLayerMnStrengthCalculation = (width:number, effectiveDepth:nu
   else {
     return '參數錯誤，請重新輸入！';
   }
+};
+
+// get Vn
+export type shearResultDataProps = null | {
+  avMin: number,
+  lambdaS: number,
+  loawW: number,
+  concreteShear: number,
+  rebarShear: number,
+  nominalShear: number,
+  requiredShear: number,
+};
+export const shearVnStrengthCalculation = (
+  width:number,
+  depth:number,
+  effectiveDepth:number,
+  Nu:number = 0,
+  fc:number,
+  fyt:number,
+  as:number,
+  av:number,
+  spacing:number,
+) => {
+  // Av, min
+  let avMin:number;
+  const area1 = roundToDigit(0.2 * Math.sqrt(fc) * width / fyt, 2);
+  const area2 = roundToDigit(3.5 * width / fyt, 2);
+  avMin = Math.max(area1, area2);
+
+  // Vc
+  // Calculate lambda s λs
+  const lambdaS = Math.min(roundToDigit(Math.sqrt(2 / (1 + effectiveDepth / 25)), 2), 1);
+  // 拉力鋼筋比
+  const loawW = roundToDigit(as / (width * effectiveDepth), 4);
+  let Vc:number;
+  const Vc1 = roundToDigit((0.53 * Math.sqrt(fc) + Nu / (6 * width * depth)) * width * effectiveDepth, 0);
+  const Vc2 = roundToDigit((2.12 * Math.cbrt(loawW) * getConcreteProperty(fc).lambda * Math.sqrt(fc) + Nu / (6 * width * depth)) * width * effectiveDepth, 0);
+  const VcMax = roundToDigit(1.33 * getConcreteProperty(fc).lambda * Math.sqrt(fc) * width * effectiveDepth, 0);
+  if (av < avMin) {
+    Vc = Math.min(lambdaS * Vc2, VcMax);
+  } else {
+    Vc = Math.min(Vc1, Vc2, VcMax);
+  }
+
+  // Check for cross section fitness
+  const phi = 0.75;
+  const maxVu = roundToDigit(phi * (Vc + 2.12 * Math.sqrt(fc) * width * effectiveDepth), 0);
+
+  // Vs
+  const Vs = roundToDigit(av * fyt * effectiveDepth / spacing, 0);
+
+  // Vn
+  const Vn = (Vc + Vs)/1000;
+
+  return {
+    avMin: avMin,
+    lambdaS: lambdaS,
+    loawW: loawW,
+    concreteShear: Vc,
+    rebarShear: Vs,
+    nominalShear: Vn,
+    requiredShear: roundToDigit(phi * Vn, 2),
+  };
 };
 
 // get minimum beam width function
