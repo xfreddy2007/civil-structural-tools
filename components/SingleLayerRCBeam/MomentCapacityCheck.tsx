@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { css, cx } from '@emotion/css';
-import { md, lg, xl } from '@/libs/utils/break-points';
 import Input from '../Input';
 import { singleLayerMnStrengthCalculation, resultDataProps } from '@/libs/utils/concrete';
 import { findRebarProperty, rebarSpec } from '@/libs/utils/rebar';
 import validate from 'validate.js';
 import { constraints } from './constraint';
-import CheckResult from './CheckResult';
+import MomentCheckResult from './MomentCheckResult';
 
 const rootStyle = css``;
 
@@ -140,7 +139,7 @@ const MomentCapacityCheck:React.FC = () => {
           <input type="reset" className="px-10 py-2 bg-green-900 text-white rounded-md hover:bg-green-700 cursor-pointer font-bold" value="重設參數"/>
         </div>
       </form>
-      {result && <CheckResult
+      {result && <MomentCheckResult
         width={MomentformData['寬度']}
         effectiveDepth={MomentformData['有效深度']}
         concreteStrength={MomentformData['混凝土抗壓強度']}

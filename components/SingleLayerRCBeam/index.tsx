@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { css, cx } from '@emotion/css';
-import { md, lg, xl } from '@/libs/utils/break-points';
 import MenuTab from '../MenuTab';
-import MomentCapacityCheck from './CapacityCheck';
+import MomentCapacityCheck from './MomentCapacityCheck';
+import ShearCapacityCheck from './ShearCapacityCheck';
 import CapacityDesign from './CapacityDesign';
 
 const rootStyle = css``;
@@ -13,6 +13,9 @@ const SingleLayerRCBeam:React.FC = () => {
   let pageContent;
   switch (tab) {
     case 2:
+      pageContent = <ShearCapacityCheck />
+      break;
+    case 3:
       pageContent = <CapacityDesign />
       break;
     case 1:
@@ -31,9 +34,15 @@ const SingleLayerRCBeam:React.FC = () => {
           id="single-rc-beam-menu-moment-capacity-check"
         />
         <MenuTab 
-          text="設計"
+          text="剪力檢核"
           selected={tab === 2}
           onClick={() => setTab(2)}
+          id="single-rc-beam-menu-shear-capacity-check"
+        />
+        <MenuTab 
+          text="設計"
+          selected={tab === 3}
+          onClick={() => setTab(3)}
           id="single-rc-beam-menu-capacity-design"
         />
       </div>

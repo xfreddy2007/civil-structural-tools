@@ -5,7 +5,7 @@ import { findRebarProperty, rebarSpec } from '@/libs/utils/rebar';
 import { getConcreteProperty, getPhiParam } from '@/libs/utils/concrete';
 import { roundToDigit } from '@/libs/utils/otherUtils';
 
-type CheckResultProps = {
+type shearCheckResultProps = {
   width?: number,
   effectiveDepth?: number,
   concreteStrength?: string,
@@ -33,7 +33,7 @@ const rootStyle = css`
   }
 `;
 
-const CheckResult:React.FC<CheckResultProps> = ({
+const ShearCheckResult:React.FC<shearCheckResultProps> = ({
   width,
   effectiveDepth,
   concreteStrength,
@@ -112,4 +112,4 @@ const CheckResult:React.FC<CheckResultProps> = ({
   );
 };
 
-export default React.memo(CheckResult);
+export default React.memo(ShearCheckResult);
