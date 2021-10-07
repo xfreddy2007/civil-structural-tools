@@ -1,6 +1,5 @@
 import React from 'react';
 import { css, cx } from '@emotion/css';
-import { errorMessageMapping } from '@/libs/utils/errorMessageMapping';
 
 type ErrorMessageProps = {
   name: string;
