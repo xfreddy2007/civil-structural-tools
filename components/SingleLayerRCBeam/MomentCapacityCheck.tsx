@@ -4,7 +4,7 @@ import Input from '../Input';
 import { singleLayerMnStrengthCalculation, resultDataProps } from '@/libs/utils/concrete';
 import { findRebarProperty, rebarSpec } from '@/libs/utils/rebar';
 import validate from 'validate.js';
-import { constraints } from './constraint';
+import { momentConstraints } from './constraint';
 import MomentCheckResult from './MomentCheckResult';
 
 const rootStyle = css``;
@@ -25,7 +25,7 @@ const MomentCapacityCheck:React.FC = () => {
   const [result, setResult] = useState<resultDataProps>(null);
   
   const inputErrorObserver = useCallback((e: any) => {
-    const error = validate({[e.target.name]: e.target.value}, constraints) || {};
+    const error = validate({[e.target.name]: e.target.value}, momentConstraints) || {};
     setError(error[e.target.name]? {[e.target.name]: error[e.target.name]} : {});
   }, []);
 
@@ -40,7 +40,7 @@ const MomentCapacityCheck:React.FC = () => {
       '主筋數量': +e.target['主筋數量'].value,
       '主筋號數': e.target['主筋號數'].value,
     };
-    const errors = validate(data, constraints);
+    const errors = validate(data, momentConstraints);
     setError(errors || {});
     if (!errors) {
       setMomentFormData(data);
@@ -74,6 +74,7 @@ const MomentCapacityCheck:React.FC = () => {
               id="寬度"
               name="寬度"
               title="梁寬度"
+              isRequired
               placeholder="ex: 30 cm"
               onChange={inputErrorObserver}
               error={error}
@@ -82,6 +83,7 @@ const MomentCapacityCheck:React.FC = () => {
               id="有效深度"
               name="有效深度"
               title="梁有效深度"
+              isRequired
               placeholder="ex: 50 cm"
               onChange={inputErrorObserver}
               error={error}
@@ -93,6 +95,7 @@ const MomentCapacityCheck:React.FC = () => {
               id="混凝土抗壓強度"
               name="混凝土抗壓強度"
               title="混凝土抗壓強度"
+              isRequired
               placeholder="ex: 280 kgf/cm^2"
               onChange={inputErrorObserver}
               error={error}
@@ -101,6 +104,7 @@ const MomentCapacityCheck:React.FC = () => {
               id="鋼筋降伏強度"
               name="鋼筋降伏強度"
               title="鋼筋降伏強度"
+              isRequired
               placeholder="ex: 4200 kgf/cm^2"
               onChange={inputErrorObserver}
               error={error}
@@ -112,6 +116,7 @@ const MomentCapacityCheck:React.FC = () => {
               id="設計彎矩"
               name="設計彎矩"
               title="設計彎矩 Mu"
+              isRequired
               placeholder="ex: 20 tf-m"
               onChange={inputErrorObserver}
               error={error}
@@ -120,6 +125,7 @@ const MomentCapacityCheck:React.FC = () => {
               id="主筋數量"
               name="主筋數量"
               title="主筋數量"
+              isRequired
               placeholder="ex: 4"
               onChange={inputErrorObserver}
               error={error}
@@ -128,6 +134,7 @@ const MomentCapacityCheck:React.FC = () => {
               id="主筋號數"
               name="主筋號數"
               title="主筋號數"
+              isRequired
               placeholder="ex: #4 or D13"
               onChange={inputErrorObserver}
               error={error}

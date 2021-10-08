@@ -152,8 +152,8 @@ export const shearVnStrengthCalculation = (
 ) => {
   // Av, min
   let avMin:number;
-  const area1 = roundToDigit(0.2 * Math.sqrt(fc) * width / fyt, 2);
-  const area2 = roundToDigit(3.5 * width / fyt, 2);
+  const area1 = roundToDigit(0.2 * Math.sqrt(fc) * width * spacing / fyt, 2);
+  const area2 = roundToDigit(3.5 * width * spacing / fyt, 2);
   avMin = Math.max(area1, area2);
 
   // Vc
@@ -284,7 +284,7 @@ const MinimunBeamWidth = [ // unit: cm
     },
   },
 ];
-export const getMinimumBeamWidth = (mainRebar:mainRebarSpec, stirrup:stirrupRebarSpec, barNum:barNumSpec):number => {
+export const getMinimumBeamWidth = (mainRebar:mainRebarSpec, stirrup:'D10'|'D13'|'D16', barNum:barNumSpec):number => {
   const stir = MinimunBeamWidth.find(i => i.main === mainRebar)!.stirrup;
   return stir[stirrup][barNum];
 };

@@ -74,39 +74,33 @@ const MomentCheckResult:React.FC<momentCheckResultProps> = ({
       </div>
       <div className="mb-6">
         <h5 className="mb-2">設計參數</h5>
-        <p>
-          <ul className="list-disc list-inside space-y-1">
-            <li>{`混凝土28天抗壓強度f'c: ${concreteStrength} kgf/cm^2`}</li>
-            <li>{`鋼筋降伏強度fy: ${rebarStrength} kgf/cm^2`}</li>
-            <li>鋼筋彈性係度: 2,040,000 kgf/cm^2</li>
-            <li>混凝土最大應變量: 0.003</li>
-          </ul>
-        </p>
+        <ul className="list-disc list-inside space-y-1">
+          <li>{`混凝土28天抗壓強度f'c: ${concreteStrength} kgf/cm^2`}</li>
+          <li>{`鋼筋降伏強度fy: ${rebarStrength} kgf/cm^2`}</li>
+          <li>鋼筋彈性係度: 2,040,000 kgf/cm^2</li>
+          <li>混凝土最大應變量: 0.003</li>
+        </ul>
       </div>
       <div className="mb-6">
         <h5 className="mb-2">檢核梁之參數</h5>
-        <p>
-          <ul className="list-disc list-inside space-y-1">
-            <li>{`寬度 b: ${width} cm`}</li>
-            <li>{`有效深度 d: ${effectiveDepth} cm`}</li>
-            <li>{`主筋號數: ${mainRebarSpec}`}</li>
-            <li>{`主筋數量: ${mainRebarNum}`}</li>
-            <li>{`設計彎矩: ${designMoment} tf - m`}</li>
-          </ul>
-        </p>
+        <ul className="list-disc list-inside space-y-1">
+          <li>{`寬度 b: ${width} cm`}</li>
+          <li>{`有效深度 d: ${effectiveDepth} cm`}</li>
+          <li>{`主筋號數: ${mainRebarSpec}`}</li>
+          <li>{`主筋數量: ${mainRebarNum}`}</li>
+          <li>{`設計彎矩: ${designMoment} tf - m`}</li>
+        </ul>
       </div>
       <div className="">
         <h5 className="block mb-2">計算過程</h5>
         <p className="block text-green-900 mb-2">彎矩檢核</p>
-        <p>
-          <ul className="block space-y-1">
-            <li className="block">{`中性軸位置 x: As*Fy/(0.85*f'c*ß*b) = ${as}*${rebarStrength}/(0.85*${concreteStrength}*${getConcreteProperty(Number(concreteStrength)).beta}*${width}) ≈ ${neuturalDepth} cm`}</li>
-            <li className="block">{`求出最外層鋼筋應變 εt: 0.003*(d-x)/x = 0.003*(${effectiveDepth}-${neuturalDepth})/${neuturalDepth} = ${et} ${etText}`}</li>
-            <li className="block">{`求出折減係數 ϕ: ${phiText}`}</li>
-            <li className="block">{`此梁之設計彎矩 ϕMn = ϕ*As*Fy*(d-(0.85*x)/2) = ${roundToDigit(getPhiParam(et!, 0.005), 2)}*${as}*${rebarStrength}*(${effectiveDepth}-(0.85*${neuturalDepth})/2)/100000 ≈ ${roundToDigit(getPhiParam(et!, 0.005), 2)} * ${nominalMoment} ≈ ${requiredMoment} tf - m`}</li>
-            <li className="block">{`此梁彎矩設計強度${momentText}`}</li>
-          </ul>
-        </p>
+        <ol className="block space-y-1">
+          <li>{`中性軸位置 x: As*Fy/(0.85*f'c*ß*b) = ${as}*${rebarStrength}/(0.85*${concreteStrength}*${getConcreteProperty(Number(concreteStrength)).beta}*${width}) ≈ ${neuturalDepth} cm`}</li>
+          <li>{`求出最外層鋼筋應變 εt: 0.003*(d-x)/x = 0.003*(${effectiveDepth}-${neuturalDepth})/${neuturalDepth} = ${et} ${etText}`}</li>
+          <li>{`求出折減係數 ϕ: ${phiText}`}</li>
+          <li>{`此梁之設計彎矩 ϕMn = ϕ*As*Fy*(d-(0.85*x)/2) = ${roundToDigit(getPhiParam(et!, 0.005), 2)}*${as}*${rebarStrength}*(${effectiveDepth}-(0.85*${neuturalDepth})/2)/100000 ≈ ${roundToDigit(getPhiParam(et!, 0.005), 2)} * ${nominalMoment} ≈ ${requiredMoment} tf - m`}</li>
+          <li>{`此梁彎矩設計強度${momentText}`}</li>
+        </ol>
       </div>
     </div>
   );
