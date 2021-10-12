@@ -14,14 +14,14 @@ type shearCheckResultProps = {
   designShear?: number,
   mainRebarNum?: number,
   mainRebarSpec?: rebarSpec,
-  stirrupSpec?: stirrupRebarSpec,
+  stirrupSpec?: rebarSpec,
   spacing?: number,
   tiesNum?: number,
-  tiesSpec?: stirrupRebarSpec,
+  tiesSpec?: rebarSpec,
   normalForce?: number,
   avMin?: number,
   lambdaS?: number,
-  loawW?: number,
+  rhoW?: number,
   concreteShear?: number,
   rebarShear?: number,
   nominalShear?: number,
@@ -57,7 +57,7 @@ const ShearCheckResult:React.FC<shearCheckResultProps> = ({
   normalForce,
   avMin,
   lambdaS,
-  loawW,
+  rhoW,
   concreteShear,
   rebarShear,
   nominalShear,
@@ -65,24 +65,29 @@ const ShearCheckResult:React.FC<shearCheckResultProps> = ({
 }) => {
   // @ts-ignore
   const as = (mainRebarNum || 0) * (findRebarProperty(mainRebarSpec)?.area || 0);
-  // let etText:string;
-  // let phiText:string;
-  // let momentText:string;
-  // if (et && et > 0.005) {
-  //   etText = ' > 0.005, 為拉力控制斷面。';
-  //   phiText = ' εt > 0.005, ϕ為 0.9';
-  // } else if (et && et >= 0.002) {
-  //   etText = ' 介於 0.005 與 0.002 之間，為轉換斷面。';
-  //   phiText = `0.005 > εt > 0.002, ϕ為 ${roundToDigit(getPhiParam(et, 0.005), 2)}`;
-  // } else {
-  //   etText = ' < 0.002，為壓力控制斷面。';
-  //   phiText = ' < 0.002, ϕ為 0.65'
-  // }
-  // if (requiredMoment && designShear && requiredMoment < designShear) {
-  //   momentText = ' < 設計彎矩，須增加鋼筋量或是加大梁尺寸。';
-  // } else {
-  //   momentText = ' > 設計彎矩，此梁檢核ＯＫ。'
-  // }
+  // @ts-ignore
+  const avStirrup = 2 * (findRebarProperty(stirrupSpec)?.area || 0);
+  // @ts-ignore
+  const avTies = (tiesNum || 0) * (findRebarProperty(tiesSpec)?.area || 0);
+
+  let VcTitle:string;
+  let VcLambda:string = '';
+  let VcFormula:string;
+  if (avMin && avMin > (avStirrup + avTies)) {
+    VcTitle = 'Av < Av,min :';
+    VcLambda = `尺寸效應 λs：√2/(1 + d / 25) = ${lambdaS && lambdaS < 1 ? `${lambdaS} <= 1 (OK)` : `${lambdaS}>=1 取 1`}`;
+    VcFormula = `混凝土剪力強度 Vc = (2.12 * λs * ∛ρw * λ * √f'c + Nu / 6Ag)bw * d = (2.12 * ${lambdaS} * ∛${rhoW} * ${getConcreteProperty(Number(concreteStrength)).lambda} * √${concreteStrength} + ${normalForce} * 1000 / (6 * ${width! * depth!})) * ${width} * ${effectiveDepth} / 1000 = ${concreteShear} tf`;
+  } else {
+    VcTitle = 'Av >= Av,min :';
+    VcFormula = `混凝土剪力強度 Vc = √0.53 * λ * √f'c * bw * d 與 (2.12 * ∛ρw * λ * √f'c + Nu / 6Ag)bw * d取小值 = min(√0.53 * ${getConcreteProperty(Number(concreteStrength)).lambda} * √${concreteStrength} * ${width} * ${effectiveDepth}, (2.12 * ∛${rhoW} * ${getConcreteProperty(Number(concreteStrength)).lambda} * √${concreteStrength} + ${normalForce} * 1000 / (6 * ${width! * depth!})) * ${width} * ${effectiveDepth}) / 1000 = ${concreteShear} tf`;
+  }
+  let resultText:string;
+  if (requiredShear && designShear && requiredShear < designShear) {
+    resultText = `ϕVn < Vu = ${designShear} tf , 此梁剪力強度不足，須增加剪力鋼筋量或是加大梁尺寸。`;
+  } else {
+    resultText = `ϕVn >= Vu = ${designShear} tf , 此梁剪力強度OK`;
+  }
+
   return (
     <div className={cx('block text-left p-4 md:p-8 xl:p-12 rounded-2xl overflow-hidden', rootStyle)}>
       <div className="mb-6">
@@ -119,11 +124,21 @@ const ShearCheckResult:React.FC<shearCheckResultProps> = ({
         <p className="block text-green-900 mb-2">剪力檢核</p>
         <ol className="list-decimal list-inside block space-y-1">
           <li>{`求出梁最小剪力鋼筋量 Av,min: 0.2 * √f'c * bw / fyt 與 3.5 * bw / fyt 取大值= Max(0.2 * √${concreteStrength} * ${width} / ${rebarStrength}, * 3.5 * ${width} / ${rebarStrength}) ≈ ${avMin} cm^2`}</li>
-          {/* <li>{`求出最外層鋼筋應變 εt: 0.003*(d-x)/x = 0.003*(${effectiveDepth}-${neuturalDepth})/${neuturalDepth} = ${et} ${etText}`}</li>
-          <li>{`求出折減係數 ϕ: ${phiText}`}</li>
-          <li>{`此梁之設計彎矩 ϕMn = ϕ*As*Fy*(d-(0.85*x)/2) = ${roundToDigit(getPhiParam(et!, 0.005), 2)}*${as}*${rebarStrength}*(${effectiveDepth}-(0.85*${neuturalDepth})/2)/100000 ≈ ${roundToDigit(getPhiParam(et!, 0.005), 2)} * ${neuturalMoment} ≈ ${requiredMoment} tf - m`}</li>
-          <li>{`此梁彎矩設計強度${momentText}`}</li> */}
+          <li>{`求出尺寸效應修正係數 λs: √2/(1 + d / 25) = √2 / (1 + ${effectiveDepth} / 25) = ${lambdaS}`}</li>
+          <li>{`求出斷面縱向拉力鋼筋比 ρw: As / (bw * d) = ${as} / (${width} * ${effectiveDepth}) = ${rhoW}`}</li>
+          <li className="flex flex-col">
+            <span>計算混凝土提供的剪力強度：</span>
+            <span>{`剪力鋼筋量 Av = 2 * ${avStirrup / 2} + ${tiesNum} * ${findRebarProperty(tiesSpec!)!.area || 0} = ${avStirrup + avTies} cm^2`}</span>
+            <span>{VcTitle}</span>
+            {VcLambda !== '' && <span>{VcLambda}</span>}
+            <span>{VcFormula}</span>
+            <span>計算鋼筋提供的剪力強度：</span>
+            <span>{`鋼筋剪力強度 Vs = Av * fyt * d / s = (${avStirrup + avTies} * ${rebarStrength} * ${effectiveDepth} / ${spacing}) / 1000 = ${rebarShear} tf`}</span>
+          </li>
+          <li>折減係數 ϕ: 0.75</li>
+          <li>{`此梁之剪力強度 ϕVn = ϕ * (Vn + Vs) = 0.75 * (${concreteShear} * ${rebarShear})= 0.75 * ${nominalShear} = ${requiredShear} tf`}</li>
         </ol>
+        <p>{resultText}</p>
       </div>
     </div>
   );

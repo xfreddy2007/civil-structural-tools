@@ -133,7 +133,7 @@ export const doubleLayerMnStrengthCalculation = (width:number, effectiveDepth:nu
 export type shearResultDataProps = null | {
   avMin: number,
   lambdaS: number,
-  loawW: number,
+  rhoW: number,
   concreteShear: number,
   rebarShear: number,
   nominalShear: number,
@@ -159,16 +159,16 @@ export const shearVnStrengthCalculation = (
   // Vc
   // Calculate lambda s λs
   const lambdaS = Math.min(roundToDigit(Math.sqrt(2 / (1 + effectiveDepth / 25)), 2), 1);
-  // 拉力鋼筋比
-  const loawW = roundToDigit(as / (width * effectiveDepth), 4);
+  // 拉力鋼筋比 ρw
+  const rhoW = roundToDigit(as / (width * effectiveDepth), 4);
   let Vc:number;
-  const Vc1 = roundToDigit((0.53 * Math.sqrt(fc) + Nu / (6 * width * depth)) * width * effectiveDepth, 0);
-  const Vc2 = roundToDigit((2.12 * Math.cbrt(loawW) * getConcreteProperty(fc).lambda * Math.sqrt(fc) + Nu / (6 * width * depth)) * width * effectiveDepth, 0);
+  const Vc1 = roundToDigit((0.53 * Math.sqrt(fc) + Nu * 1000 / (6 * width * depth)) * width * effectiveDepth, 0);
+  const Vc2 = roundToDigit((2.12 * Math.cbrt(rhoW) * getConcreteProperty(fc).lambda * Math.sqrt(fc) + Nu * 1000 / (6 * width * depth)) * width * effectiveDepth, 0);
   const VcMax = roundToDigit(1.33 * getConcreteProperty(fc).lambda * Math.sqrt(fc) * width * effectiveDepth, 0);
   if (av < avMin) {
-    Vc = Math.min(lambdaS * Vc2, VcMax);
+    Vc = roundToDigit(Math.min(lambdaS * Vc2, VcMax)/1000, 2);
   } else {
-    Vc = Math.min(Vc1, Vc2, VcMax);
+    Vc = roundToDigit(Math.min(Vc1, Vc2, VcMax)/1000,2);
   }
 
   // Check for cross section fitness
@@ -176,15 +176,15 @@ export const shearVnStrengthCalculation = (
   const maxVu = roundToDigit(phi * (Vc + 2.12 * Math.sqrt(fc) * width * effectiveDepth), 0);
 
   // Vs
-  const Vs = roundToDigit(av * fyt * effectiveDepth / spacing, 0);
+  const Vs = roundToDigit(av * fyt * effectiveDepth / spacing / 1000, 2);
 
   // Vn
-  const Vn = (Vc + Vs)/1000;
+  const Vn = Vc + Vs;
 
   return {
     avMin: avMin,
     lambdaS: lambdaS,
-    loawW: loawW,
+    rhoW: rhoW,
     concreteShear: Vc,
     rebarShear: Vs,
     nominalShear: Vn,
