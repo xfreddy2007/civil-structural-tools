@@ -71,16 +71,15 @@ const ShearCheckResult:React.FC<shearCheckResultProps> = ({
   const avTies = (tiesNum || 0) * (findRebarProperty(tiesSpec)?.area || 0);
 
   let VcTitle:string;
-  let VcLambda:string = '';
   let VcFormula:string;
   if (avMin && avMin > (avStirrup + avTies)) {
     VcTitle = 'Av < Av,min :';
-    VcLambda = `尺寸效應 λs：√2/(1 + d / 25) = ${lambdaS && lambdaS < 1 ? `${lambdaS} <= 1 (OK)` : `${lambdaS}>=1 取 1`}`;
     VcFormula = `混凝土剪力強度 Vc = (2.12 * λs * ∛ρw * λ * √f'c + Nu / 6Ag)bw * d = (2.12 * ${lambdaS} * ∛${rhoW} * ${getConcreteProperty(Number(concreteStrength)).lambda} * √${concreteStrength} + ${normalForce} * 1000 / (6 * ${width! * depth!})) * ${width} * ${effectiveDepth} / 1000 = ${concreteShear} tf`;
   } else {
     VcTitle = 'Av >= Av,min :';
     VcFormula = `混凝土剪力強度 Vc = √0.53 * λ * √f'c * bw * d 與 (2.12 * ∛ρw * λ * √f'c + Nu / 6Ag)bw * d取小值 = min(√0.53 * ${getConcreteProperty(Number(concreteStrength)).lambda} * √${concreteStrength} * ${width} * ${effectiveDepth}, (2.12 * ∛${rhoW} * ${getConcreteProperty(Number(concreteStrength)).lambda} * √${concreteStrength} + ${normalForce} * 1000 / (6 * ${width! * depth!})) * ${width} * ${effectiveDepth}) / 1000 = ${concreteShear} tf`;
   }
+
   let resultText:string;
   if (requiredShear && designShear && requiredShear < designShear) {
     resultText = `ϕVn < Vu = ${designShear} tf , 此梁剪力強度不足，須增加剪力鋼筋量或是加大梁尺寸。`;
@@ -119,7 +118,7 @@ const ShearCheckResult:React.FC<shearCheckResultProps> = ({
           <li>{`軸力大小: ${normalForce} tf`}</li>
         </ul>
       </div>
-      <div className="">
+      <div>
         <h5 className="block mb-2">計算過程</h5>
         <p className="block text-green-900 mb-2">剪力檢核</p>
         <ol className="list-decimal list-inside block space-y-1">
@@ -130,14 +129,14 @@ const ShearCheckResult:React.FC<shearCheckResultProps> = ({
             <span>計算混凝土提供的剪力強度：</span>
             <span>{`剪力鋼筋量 Av = 2 * ${avStirrup / 2} + ${tiesNum} * ${findRebarProperty(tiesSpec!)!.area || 0} = ${avStirrup + avTies} cm^2`}</span>
             <span>{VcTitle}</span>
-            {VcLambda !== '' && <span>{VcLambda}</span>}
             <span>{VcFormula}</span>
             <span>計算鋼筋提供的剪力強度：</span>
             <span>{`鋼筋剪力強度 Vs = Av * fyt * d / s = (${avStirrup + avTies} * ${rebarStrength} * ${effectiveDepth} / ${spacing}) / 1000 = ${rebarShear} tf`}</span>
           </li>
           <li>折減係數 ϕ: 0.75</li>
-          <li>{`此梁之剪力強度 ϕVn = ϕ * (Vn + Vs) = 0.75 * (${concreteShear} * ${rebarShear})= 0.75 * ${nominalShear} = ${requiredShear} tf`}</li>
+          <li>{`此梁之剪力強度 ϕVn = ϕ * Vn + Vs = 0.75 * ${concreteShear} * ${rebarShear} = 0.75 * ${nominalShear} * ${requiredShear} tf`}</li>
         </ol>
+
         <p>{resultText}</p>
       </div>
     </div>
