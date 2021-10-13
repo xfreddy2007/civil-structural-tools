@@ -4,12 +4,12 @@ import { md, lg, xl } from '@/libs/utils/break-points';
 
 const rootStyle = css``;
 
-const CapacityDesign:React.FC = () => {
+const MomentCapacityDesign:React.FC = () => {
   return (
     <div className={cx('', rootStyle)}>
-      Capacity Design
+      Moment Capacity Design
     </div>
   );
 };
 
-export default React.memo(CapacityDesign);
+export default React.memo(MomentCapacityDesign);

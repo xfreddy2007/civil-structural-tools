@@ -15,12 +15,16 @@ const pageList:pageListProps[] = [
     tab: 'RC',
     pages: [
       {
-        page:'單筋梁檢核/設計',
+        page:'單筋梁彎矩檢核/設計',
         url: '/single-layer-rc-beam',
       }, 
       {
-        page: '雙筋梁檢核/設計',
+        page: '雙筋梁彎矩檢核/設計',
         url: '/double-layer-rc-beam'
+      },
+      {
+        page: '梁剪力檢核/設計',
+        url: '/shear-rc-beam'
       },
     ],
   },

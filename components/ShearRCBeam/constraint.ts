@@ -3,8 +3,20 @@ import { rebarMapping, rebarYieldStrength } from '@/libs/utils/rebar';
 import { concreteStrengthList } from '@/libs/utils/concrete';
 // declare the constraint for single layer rc beam form
 
-export const momentConstraints = {
+export const shearConstraints = {
   '寬度': {
+    presence: {
+      allowEmpty: false,
+      message: "為必填項目",
+    },
+    numericality: {
+      strict: true,
+      greaterThan: 0,
+      notValid: '必須是一個有效數字',
+      notGreaterThan: '必須大於0',
+    },
+  },
+  '總深度': {
     presence: {
       allowEmpty: false,
       message: "為必填項目",
@@ -51,7 +63,7 @@ export const momentConstraints = {
     },
     type: "rebarYieldStrengthType",
   },
-  '設計彎矩': {
+  '設計剪力': {
     presence: {
       allowEmpty: false,
       message: "為必填項目",
@@ -61,6 +73,12 @@ export const momentConstraints = {
       greaterThan: 0,
       notValid: '必須是一個有效數字',
       notGreaterThan: '必須大於0',
+    },
+  },
+  '軸力大小': {
+    numericality: {
+      strict: true,
+      notValid: '必須是一個有效數字',
     },
   },
   '主筋數量': {
@@ -84,6 +102,42 @@ export const momentConstraints = {
     },
     type: "rebarSpecType",
   },
+  '箍筋間距': {
+    presence: {
+      allowEmpty: false,
+      message: "為必填項目",
+    },
+    numericality: {
+      strict: true,
+      greaterThan: 0,
+      notValid: '必須是一個有效數字',
+      notGreaterThan: '必須大於0',
+    },
+  },
+  '箍筋號數': {
+    presence: {
+      allowEmpty: false,
+      message: "為必填項目",
+    },
+    type: "stirrupRebarSpecType",
+  },
+  '繫筋數量': {
+    presence: {
+      allowEmpty: true,
+    },
+    numericality: {
+      strict: false,
+      onlyInteger: true,
+      notValid: '必須是一個有效數字',
+      notInteger: '必須是一個正整數'
+    },
+  },
+  '繫筋號數': {
+    presence: {
+      allowEmpty: true,
+    },
+    type: "stirrupRebarSpecType",
+  },
 };
 
 // concreteStrengthType
@@ -103,3 +157,11 @@ validate.validators.type.types.rebarSpecType = function (value:string) {
   return !(Object.keys(rebarMapping).findIndex(i => i === value) < 0); 
 };
 validate.validators.type.messages.rebarSpecType = "輸入不正確的規格，請輸入正確的鋼筋號數";
+
+// stirrupRebarSpecType
+validate.validators.type.types.stirrupRebarSpecType = function (value:string) {
+  return !(Object.keys(rebarMapping)
+    .filter((j) => j === '#3' || j === '#4' || j === '#5')
+    .findIndex(i => i === value) < 0); 
+};
+validate.validators.type.messages.stirrupRebarSpecType = "輸入不正確的規格，請輸入正確的鋼筋號數";
