@@ -25,6 +25,7 @@ type shearCheckResultProps = {
   concreteShear?: number,
   rebarShear?: number,
   nominalShear?: number,
+  maximunVu?: number,
   requiredShear?: number,
 };
 
@@ -61,6 +62,7 @@ const ShearCheckResult:React.FC<shearCheckResultProps> = ({
   concreteShear,
   rebarShear,
   nominalShear,
+  maximunVu,
   requiredShear,
 }) => {
   // @ts-ignore
@@ -81,7 +83,9 @@ const ShearCheckResult:React.FC<shearCheckResultProps> = ({
   }
 
   let resultText:string;
-  if (requiredShear && designShear && requiredShear < designShear) {
+  if (designShear && maximunVu && designShear > maximunVu) {
+    resultText = `Vu > 5ϕVc, 須加大梁尺寸。`
+  } else if (requiredShear && designShear && requiredShear < designShear) {
     resultText = `ϕVn < Vu = ${designShear} tf , 此梁剪力強度不足，須增加剪力鋼筋量或是加大梁尺寸。`;
   } else {
     resultText = `ϕVn >= Vu = ${designShear} tf , 此梁剪力強度OK`;
@@ -136,7 +140,6 @@ const ShearCheckResult:React.FC<shearCheckResultProps> = ({
           <li>折減係數 ϕ: 0.75</li>
           <li>{`此梁之剪力強度 ϕVn = ϕ * Vn + Vs = 0.75 * ${concreteShear} * ${rebarShear} = 0.75 * ${nominalShear} * ${requiredShear} tf`}</li>
         </ol>
-
         <p>{resultText}</p>
       </div>
     </div>

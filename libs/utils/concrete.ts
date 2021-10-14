@@ -60,7 +60,13 @@ export const getPhiParam = (et:number, ety:number, isSpiral:boolean = false):num
   }
 };
 
-// get Mn
+// Minimum rebar Area As,min
+export const getMinimumRebarArea = (width:number, effectiveDepth:number, fc:number, fy:number):number => {
+  return Math.max(roundToDigit(14 * width * effectiveDepth / fy, 3), roundToDigit(0.8 * Math.sqrt(fc) * width * effectiveDepth / fy, 3));
+};
+
+/** Single layer RC Beam */
+// Mn calculation
 export type resultDataProps = null | {
   neuturalDepth: number,
   et: number,
@@ -78,6 +84,40 @@ export const singleLayerMnStrengthCalculation = (width:number, effectiveDepth:nu
     nominalMoment: roundToDigit(as * fy * (effectiveDepth - 0.5 * 0.85 * neuturalDepth) / 100000, 2), // tf - m
     requiredMoment: roundToDigit(phi * as * fy * (effectiveDepth - 0.5 * 0.85 * neuturalDepth) / 100000, 2), // tf - m
   }; 
+};
+
+// Design formula
+export type designResultDataProps = null | {
+  momentParam: number,
+  materialParam: number,
+  designRebarAreaRatio: number,
+  neuturalDepth: number,
+  asMin: number,
+  asMax: number,
+};
+export const singleLayerRebarRatioDesign = (width:number, effectiveDepth:number, fc:number, fy:number, Mu:number):designResultDataProps => {
+  // Moment Parameter Rn
+  // 401-110 specificaiton defined design phi ϕ to be 0.009
+  const Rn = roundToDigit(Mu * 100000 / (0.009 * width * effectiveDepth * effectiveDepth), 3);
+  // Material Parameter m
+  const m = roundToDigit(fy / (0.85 * fc), 2);
+
+  // Tension Rebar ratio
+  const designRho = roundToDigit((1 / m) * (1 - Math.sqrt(1 - (2 * m * Rn / fy))), 4);
+
+  // Maximun rebar area As,max
+  // assume design phi ϕ to be 0.009
+  // neuturalDepth x = 3/8 d
+  const neuturalDepth = roundToDigit(3 * effectiveDepth / 8, 2); // cm
+  const asMax = roundToDigit((Mu * 100000 / 0.9) / (fy * (effectiveDepth - 0.5 * 0.85 * neuturalDepth)), 2);
+  return {
+    momentParam: Rn,
+    materialParam: m,
+    designRebarAreaRatio: designRho,
+    neuturalDepth: neuturalDepth,
+    asMin: getMinimumRebarArea(width, effectiveDepth, fc, fy),
+    asMax: asMax,
+  };
 };
 
 export const doubleLayerMnStrengthCalculation = (width:number, effectiveDepth:number, effectiveDepthTop:number, fc:number, fy:number, as:number, asTop:number):number|string => {
@@ -137,6 +177,7 @@ export type shearResultDataProps = null | {
   concreteShear: number,
   rebarShear: number,
   nominalShear: number,
+  maximunVu: number,
   requiredShear: number,
 };
 export const shearVnStrengthCalculation = (
@@ -149,7 +190,7 @@ export const shearVnStrengthCalculation = (
   as:number,
   av:number,
   spacing:number,
-) => {
+):shearResultDataProps => {
   // Av, min
   let avMin:number;
   const area1 = roundToDigit(0.2 * Math.sqrt(fc) * width * spacing / fyt, 2);
@@ -188,6 +229,7 @@ export const shearVnStrengthCalculation = (
     concreteShear: Vc,
     rebarShear: Vs,
     nominalShear: Vn,
+    maximunVu: maxVu,
     requiredShear: roundToDigit(phi * Vn, 2),
   };
 };
