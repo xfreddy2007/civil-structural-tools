@@ -148,6 +148,23 @@ export const designConstraints = {
   },
 };
 
+export const mainRebarConstraint = {
+  '主筋號數': {
+    presence: {
+      allowEmpty: false,
+      message: "為必填項目",
+    },
+    type: "rebarSpecType",
+  },
+  '箍筋號數': {
+    presence: {
+      allowEmpty: false,
+      message: "為必填項目",
+    },
+    type: "stirrupRebarSpecType",
+  },
+};
+
 // concreteStrengthType
 validate.validators.type.types.concreteStrengthType = function (value:string) {
   return !(concreteStrengthList.findIndex(i => i === value) < 0); 
@@ -165,3 +182,11 @@ validate.validators.type.types.rebarSpecType = function (value:string) {
   return !(Object.keys(rebarMapping).findIndex(i => i === value) < 0); 
 };
 validate.validators.type.messages.rebarSpecType = "輸入不正確的規格，請輸入正確的鋼筋號數";
+
+// stirrupRebarSpecType
+validate.validators.type.types.stirrupRebarSpecType = function (value:string) {
+  return !(Object.keys(rebarMapping)
+    .filter((j) => j === '#3' || j === '#4' || j === '#5' || j === 'D10' || j === 'D13' || j === 'D16')
+    .findIndex(i => i === value) < 0); 
+};
+validate.validators.type.messages.stirrupRebarSpecType = "輸入不正確的規格，請輸入正確的鋼筋號數";

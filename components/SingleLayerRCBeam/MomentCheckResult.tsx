@@ -95,10 +95,10 @@ const MomentCheckResult:React.FC<momentCheckResultProps> = ({
         <h5 className="block mb-2">計算過程</h5>
         <p className="block text-green-900 mb-2">彎矩檢核</p>
         <ol className="block space-y-1">
-          <li>{`中性軸位置 x: As*Fy/(0.85*f'c*ß*b) = ${as}*${rebarStrength}/(0.85*${concreteStrength}*${getConcreteProperty(Number(concreteStrength)).beta}*${width}) ≈ ${neuturalDepth} cm`}</li>
-          <li>{`求出最外層鋼筋應變 εt: 0.003*(d-x)/x = 0.003*(${effectiveDepth}-${neuturalDepth})/${neuturalDepth} = ${et} ${etText}`}</li>
+          <li>{`中性軸位置 x: As * Fy / (0.85 * f'c * ß * b) = ${as}*${rebarStrength}/(0.85 * ${concreteStrength} * ${getConcreteProperty(Number(concreteStrength)).beta} * ${width}) ≈ ${neuturalDepth} cm`}</li>
+          <li>{`求出最外層鋼筋應變 εt: 0.003 * (d-x) / x = 0.003 * (${effectiveDepth} - ${neuturalDepth}) / ${neuturalDepth} = ${et} ${etText}`}</li>
           <li>{`求出折減係數 ϕ: ${phiText}`}</li>
-          <li>{`此梁之設計彎矩 ϕMn = ϕ*As*Fy*(d-(0.85*x)/2) = ${roundToDigit(getPhiParam(et!, 0.005), 2)}*${as}*${rebarStrength}*(${effectiveDepth}-(0.85*${neuturalDepth})/2)/100000 ≈ ${roundToDigit(getPhiParam(et!, 0.005), 2)} * ${nominalMoment} ≈ ${requiredMoment} tf - m`}</li>
+          <li>{`此梁之設計彎矩 ϕMn = ϕ * As * Fy * (d - (0.85 * x) / 2) = ${roundToDigit(getPhiParam(et!, 0.005), 2)} * ${as} * ${rebarStrength} * (${effectiveDepth} - (0.85 * ${neuturalDepth}) / 2) / 100000 ≈ ${roundToDigit(getPhiParam(et!, 0.005), 2)} * ${nominalMoment} ≈ ${requiredMoment} tf - m`}</li>
           <li>{`此梁彎矩設計強度${momentText}`}</li>
         </ol>
       </div>

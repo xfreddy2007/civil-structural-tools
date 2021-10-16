@@ -161,7 +161,7 @@ validate.validators.type.messages.rebarSpecType = "輸入不正確的規格，�
 // stirrupRebarSpecType
 validate.validators.type.types.stirrupRebarSpecType = function (value:string) {
   return !(Object.keys(rebarMapping)
-    .filter((j) => j === '#3' || j === '#4' || j === '#5')
+    .filter((j) => j === '#3' || j === '#4' || j === '#5' || j === 'D10' || j === 'D13' || j === 'D16')
     .findIndex(i => i === value) < 0); 
 };
 validate.validators.type.messages.stirrupRebarSpecType = "輸入不正確的規格，請輸入正確的鋼筋號數";

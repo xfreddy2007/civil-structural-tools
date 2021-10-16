@@ -90,30 +90,30 @@ export const singleLayerMnStrengthCalculation = (width:number, effectiveDepth:nu
 export type designResultDataProps = null | {
   momentParam: number,
   materialParam: number,
-  designRebarAreaRatio: number,
+  designRebarArea: number,
   neuturalDepth: number,
   asMin: number,
   asMax: number,
 };
 export const singleLayerRebarRatioDesign = (width:number, effectiveDepth:number, fc:number, fy:number, Mu:number):designResultDataProps => {
   // Moment Parameter Rn
-  // 401-110 specificaiton defined design phi ϕ to be 0.009
-  const Rn = roundToDigit(Mu * 100000 / (0.009 * width * effectiveDepth * effectiveDepth), 3);
+  // 401-110 specificaiton defined design phi ϕ to be 0.9
+  const Rn = roundToDigit(Mu * 100000 / (0.9 * width * effectiveDepth * effectiveDepth), 3);
   // Material Parameter m
   const m = roundToDigit(fy / (0.85 * fc), 2);
 
   // Tension Rebar ratio
-  const designRho = roundToDigit((1 / m) * (1 - Math.sqrt(1 - (2 * m * Rn / fy))), 4);
+  const designRebarArea = roundToDigit((1 / m) * (1 - Math.sqrt(1 - (2 * m * Rn / fy))) * width * effectiveDepth, 3);
 
   // Maximun rebar area As,max
-  // assume design phi ϕ to be 0.009
+  // assume design phi ϕ to be 0.9
   // neuturalDepth x = 3/8 d
   const neuturalDepth = roundToDigit(3 * effectiveDepth / 8, 2); // cm
   const asMax = roundToDigit((Mu * 100000 / 0.9) / (fy * (effectiveDepth - 0.5 * 0.85 * neuturalDepth)), 2);
   return {
     momentParam: Rn,
     materialParam: m,
-    designRebarAreaRatio: designRho,
+    designRebarArea: designRebarArea,
     neuturalDepth: neuturalDepth,
     asMin: getMinimumRebarArea(width, effectiveDepth, fc, fy),
     asMax: asMax,
@@ -235,7 +235,6 @@ export const shearVnStrengthCalculation = (
 };
 
 // get minimum beam width function
-type barNumSpec = '2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'|'10';
 const MinimunBeamWidth = [ // unit: cm
   {
     main: 'D10',
@@ -326,7 +325,8 @@ const MinimunBeamWidth = [ // unit: cm
     },
   },
 ];
-export const getMinimumBeamWidth = (mainRebar:mainRebarSpec, stirrup:'D10'|'D13'|'D16', barNum:barNumSpec):number => {
+export const getMinimumBeamWidth = (mainRebar:mainRebarSpec, stirrup:'D10'|'D13'|'D16', barNum:string):number => {
   const stir = MinimunBeamWidth.find(i => i.main === mainRebar)!.stirrup;
+  // @ts-ignore
   return stir[stirrup][barNum];
 };

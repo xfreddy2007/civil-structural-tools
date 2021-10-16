@@ -13,7 +13,10 @@ import { roundToDigit } from './otherUtils';
 export type rebarSpec = '#3'|'#4'|'#5'|'#6'|'#7'|'#8'|'#9'|'#10'|'#11'|'#14'|'#18'|'D10'|'D13'|'D16'|'D19'|'D22'|'D25'|'D29'|'D32'|'D36'|'D43'|'D57'; 
 export type mainRebarSpec = 'D10'|'D13'|'D16'|'D19'|'D22'|'D25'|'D29'|'D32'|'D36'|'D43'|'D57';
 export type stirrupRebarSpec = '#3'|'#4'|'#5'|'D10'|'D13'|'D16';
-export const rebarMapping = {
+type rebarMappingTypes = {
+  [index in rebarSpec]: mainRebarSpec;
+};
+export const rebarMapping:rebarMappingTypes = {
   '#3': 'D10',
   '#4': 'D13',
   '#5': 'D16',
@@ -37,6 +40,17 @@ export const rebarMapping = {
   'D43': 'D43',
   'D57': 'D57',
 };
+type stirrupMappingTypes = {
+  [index in stirrupRebarSpec]: 'D10'|'D13'|'D16';
+};
+export const stirrupMapping:stirrupMappingTypes = {
+  '#3': 'D10',
+  '#4': 'D13',
+  '#5': 'D16',
+  'D10': 'D10',
+  'D13': 'D13',
+  'D16': 'D16',
+}
 
 // rebar yield strength
 export const rebarYieldStrength = ['2800', '4200'];

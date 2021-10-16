@@ -143,7 +143,7 @@ const MomentCapacityCheck:React.FC = () => {
         </div>
         <div className="flex space-x-4">
           <button type="submit" className="px-10 py-2 bg-green-900 text-white rounded-md hover:bg-green-700 cursor-pointer font-bold">檢核</button>
-          <input type="reset" className="px-10 py-2 bg-green-900 text-white rounded-md hover:bg-green-700 cursor-pointer font-bold" value="重設參數"/>
+          <input type="reset" className="px-10 py-2 bg-green-900 text-white rounded-md hover:bg-green-700 cursor-pointer font-bold" value="重設參數" onClick={() => setMomentFormData({})} />
         </div>
       </form>
       {result && <MomentCheckResult

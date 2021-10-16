@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { css, cx } from '@emotion/css';
-import { md, lg, xl } from '@/libs/utils/break-points';
 import Input from '../Input';
 import { singleLayerRebarRatioDesign, designResultDataProps } from '@/libs/utils/concrete';
-import { findRebarProperty, rebarSpec } from '@/libs/utils/rebar';
 import validate from 'validate.js';
 import { designConstraints } from './constraint';
 import MomentDesignResult from './MomentDesignResult';
@@ -46,20 +44,21 @@ const MomentCapacityDesign:React.FC = () => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (Object.keys(MomentformData).length > 0) {
-  //     const area = findRebarProperty(MomentformData['主筋號數']!);
-  //     setResult(singleLayerMnStrengthCalculation(
-  //       MomentformData['寬度']!,
-  //       MomentformData['有效深度']!,
-  //       Number(MomentformData['混凝土抗壓強度']!),
-  //       Number(MomentformData['鋼筋降伏強度']!),
-  //       MomentformData['主筋數量']! * area!.area,
-  //     ));
-  //   } else {
-  //     setResult(null);
-  //   }
-  // }, [MomentformData]);
+  useEffect(() => {
+    if (Object.keys(MomentformData).length > 0) {
+      // Assume effective depth to be 90% of total depth
+      const effectiveDepth = 0.9 * MomentformData['總梁深度']!;
+      setResult(singleLayerRebarRatioDesign(
+        MomentformData['寬度']!,
+        effectiveDepth,
+        Number(MomentformData['混凝土抗壓強度']!),
+        Number(MomentformData['鋼筋降伏強度']!),
+        MomentformData['設計彎矩']!,
+      ));
+    } else {
+      setResult(null);
+    }
+  }, [MomentformData]);
 
   return (
     <div className={cx('w-full block', rootStyle)}>
@@ -121,18 +120,18 @@ const MomentCapacityDesign:React.FC = () => {
           </div>
         </div>
         <div className="flex space-x-4">
-          <button type="submit" className="px-10 py-2 bg-green-900 text-white rounded-md hover:bg-green-700 cursor-pointer font-bold">檢核</button>
-          <input type="reset" className="px-10 py-2 bg-green-900 text-white rounded-md hover:bg-green-700 cursor-pointer font-bold" value="重設參數"/>
+          <button type="submit" className="px-10 py-2 bg-green-900 text-white rounded-md hover:bg-green-700 cursor-pointer font-bold">設計</button>
+          <input type="reset" className="px-10 py-2 bg-green-900 text-white rounded-md hover:bg-green-700 cursor-pointer font-bold" value="重設參數" onClick={() => setMomentFormData({})} />
         </div>
       </form>
-      {/* {result && <MomentDesignResult
+      {result && <MomentDesignResult
         width={MomentformData['寬度']}
         depth={MomentformData['總梁深度']}
         concreteStrength={MomentformData['混凝土抗壓強度']}
         rebarStrength={MomentformData['鋼筋降伏強度']}
         designMoment={MomentformData['設計彎矩']}
         {...result}
-      />} */}
+      />}
     </div>
   );
 };
