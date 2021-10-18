@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { css, cx } from '@emotion/css';
-import { md, lg, xl } from '@/libs/utils/break-points';
+import { md, xl } from '@/libs/utils/break-points';
 import Input from '../Input';
 import validate from 'validate.js';
 import { mainRebarConstraint } from './constraint';
 import { findRebarProperty, rebarSpec, stirrupRebarSpec, rebarMapping, stirrupMapping } from '@/libs/utils/rebar';
-import { getConcreteProperty, getPhiParam, getMinimumBeamWidth } from '@/libs/utils/concrete';
+import { getMinimumBeamWidth } from '@/libs/utils/concrete';
 import { roundToDigit } from '@/libs/utils/otherUtils';
 
 type MomentDesignResultProps = {

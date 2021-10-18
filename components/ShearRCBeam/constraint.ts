@@ -140,6 +140,90 @@ export const shearConstraints = {
   },
 };
 
+export const designConstraints = {
+  '寬度': {
+    presence: {
+      allowEmpty: false,
+      message: "為必填項目",
+    },
+    numericality: {
+      strict: true,
+      greaterThan: 0,
+      notValid: '必須是一個有效數字',
+      notGreaterThan: '必須大於0',
+    },
+  },
+  '總梁深度': {
+    presence: {
+      allowEmpty: false,
+      message: "為必填項目",
+    },
+    numericality: {
+      strict: true,
+      greaterThan: 0,
+      notValid: '必須是一個有效數字',
+      notGreaterThan: '必須大於0',
+    },
+  },
+  '混凝土抗壓強度': {
+    presence: {
+      allowEmpty: false,
+      message: "為必填項目",
+    },
+    numericality: {
+      strict: true,
+      notValid: '必須是一個有效數字',
+    },
+    type: "concreteStrengthType",
+  },
+  '鋼筋降伏強度': {
+    presence: {
+      allowEmpty: false,
+      message: "為必填項目",
+    },
+    numericality: {
+      strict: true,
+      greaterThan: 0,
+      notValid: '必須是一個有效數字',
+    },
+    type: "rebarYieldStrengthType",
+  },
+  '設計剪力': {
+    presence: {
+      allowEmpty: false,
+      message: "為必填項目",
+    },
+    numericality: {
+      strict: true,
+      greaterThan: 0,
+      notValid: '必須是一個有效數字',
+      notGreaterThan: '必須大於0',
+    },
+  },
+};
+
+export const stirrupRebarConstraint = {
+  '箍筋號數': {
+    presence: {
+      allowEmpty: false,
+      message: "為必填項目",
+    },
+    type: "stirrupRebarSpecType",
+  },
+  '箍筋間距': {
+    presence: {
+      allowEmpty: false,
+      message: "為必填項目",
+    },
+    numericality: {
+      strict: true,
+      greaterThan: 0,
+      notValid: '必須是一個有效數字',
+      notGreaterThan: '必須大於0',
+    },
+  },
+};
+
 // concreteStrengthType
 validate.validators.type.types.concreteStrengthType = function (value:string) {
   return !(concreteStrengthList.findIndex(i => i === value) < 0); 

@@ -104,7 +104,7 @@ const ShearCapacityCheck:React.FC = () => {
             <Input
               id="總深度"
               name="總深度"
-              title="梁總深度"
+              title="總梁深度"
               isRequired
               placeholder="ex: 60 cm"
               onChange={inputErrorObserver}

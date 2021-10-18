@@ -169,6 +169,43 @@ export const doubleLayerMnStrengthCalculation = (width:number, effectiveDepth:nu
   }
 };
 
+/** Shear Calculation for RC Beam */
+// Vc calculation formula
+export type vcResultDataProps = null | {
+  lambdaS: number,
+  rhoW: number,
+  concreteShear: number,
+}
+export const getVcStrength = (
+  width:number,
+  depth:number,
+  effectiveDepth:number,
+  Nu:number = 0,
+  fc:number,
+  isAvbelowMin: boolean,
+  as:number
+):vcResultDataProps => {
+  // Vc
+  // Calculate lambda s λs
+  const lambdaS = Math.min(roundToDigit(Math.sqrt(2 / (1 + effectiveDepth / 25)), 2), 1);
+  // 拉力鋼筋比 ρw
+  const rhoW = roundToDigit(as / (width * effectiveDepth), 4);
+  let Vc:number;
+  const Vc1 = roundToDigit((0.53 * Math.sqrt(fc) + Nu * 1000 / (6 * width * depth)) * width * effectiveDepth, 0);
+  const Vc2 = roundToDigit((2.12 * Math.cbrt(rhoW) * getConcreteProperty(fc).lambda * Math.sqrt(fc) + Nu * 1000 / (6 * width * depth)) * width * effectiveDepth, 0);
+  const VcMax = roundToDigit(1.33 * getConcreteProperty(fc).lambda * Math.sqrt(fc) * width * effectiveDepth, 0);
+  if (isAvbelowMin) {
+    Vc = roundToDigit(Math.min(lambdaS * Vc2, VcMax)/1000, 2);
+  } else {
+    Vc = roundToDigit(Math.min(Vc1, Vc2, VcMax)/1000,2);
+  }
+  return {
+    lambdaS,
+    rhoW,
+    concreteShear: Vc,
+  };
+};
+
 // get Vn
 export type shearResultDataProps = null | {
   avMin: number,
@@ -198,19 +235,7 @@ export const shearVnStrengthCalculation = (
   avMin = Math.max(area1, area2);
 
   // Vc
-  // Calculate lambda s λs
-  const lambdaS = Math.min(roundToDigit(Math.sqrt(2 / (1 + effectiveDepth / 25)), 2), 1);
-  // 拉力鋼筋比 ρw
-  const rhoW = roundToDigit(as / (width * effectiveDepth), 4);
-  let Vc:number;
-  const Vc1 = roundToDigit((0.53 * Math.sqrt(fc) + Nu * 1000 / (6 * width * depth)) * width * effectiveDepth, 0);
-  const Vc2 = roundToDigit((2.12 * Math.cbrt(rhoW) * getConcreteProperty(fc).lambda * Math.sqrt(fc) + Nu * 1000 / (6 * width * depth)) * width * effectiveDepth, 0);
-  const VcMax = roundToDigit(1.33 * getConcreteProperty(fc).lambda * Math.sqrt(fc) * width * effectiveDepth, 0);
-  if (av < avMin) {
-    Vc = roundToDigit(Math.min(lambdaS * Vc2, VcMax)/1000, 2);
-  } else {
-    Vc = roundToDigit(Math.min(Vc1, Vc2, VcMax)/1000,2);
-  }
+  const Vc = getVcStrength(width, depth, effectiveDepth, Nu, fc, (av < avMin), as)!.concreteShear;
 
   // Check for cross section fitness
   const phi = 0.75;
@@ -224,9 +249,9 @@ export const shearVnStrengthCalculation = (
 
   return {
     avMin: avMin,
-    lambdaS: lambdaS,
-    rhoW: rhoW,
-    concreteShear: Vc,
+    lambdaS: getVcStrength(width, depth, effectiveDepth, Nu, fc, (av < avMin), as)!.lambdaS,
+    rhoW: getVcStrength(width, depth, effectiveDepth, Nu, fc, (av < avMin), as)!.rhoW,
+    concreteShear: Vc!,
     rebarShear: Vs,
     nominalShear: Vn,
     maximunVu: maxVu,

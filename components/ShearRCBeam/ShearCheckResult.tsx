@@ -79,7 +79,7 @@ const ShearCheckResult:React.FC<shearCheckResultProps> = ({
     VcFormula = `混凝土剪力強度 Vc = (2.12 * λs * ∛ρw * λ * √f'c + Nu / 6Ag)bw * d = (2.12 * ${lambdaS} * ∛${rhoW} * ${getConcreteProperty(Number(concreteStrength)).lambda} * √${concreteStrength} + ${normalForce} * 1000 / (6 * ${width! * depth!})) * ${width} * ${effectiveDepth} / 1000 = ${concreteShear} tf`;
   } else {
     VcTitle = 'Av >= Av,min :';
-    VcFormula = `混凝土剪力強度 Vc = √0.53 * λ * √f'c * bw * d 與 (2.12 * ∛ρw * λ * √f'c + Nu / 6Ag)bw * d取小值 = min(√0.53 * ${getConcreteProperty(Number(concreteStrength)).lambda} * √${concreteStrength} * ${width} * ${effectiveDepth}, (2.12 * ∛${rhoW} * ${getConcreteProperty(Number(concreteStrength)).lambda} * √${concreteStrength} + ${normalForce} * 1000 / (6 * ${width! * depth!})) * ${width} * ${effectiveDepth}) / 1000 = ${concreteShear} tf`;
+    VcFormula = `混凝土剪力強度 Vc = √0.53 * λ * √f'c * bw * d 與 (2.12 * ∛ρw * λ * √f'c + Nu / 6Ag)bw * d 取小值 = min(√0.53 * ${getConcreteProperty(Number(concreteStrength)).lambda} * √${concreteStrength} * ${width} * ${effectiveDepth}, (2.12 * ∛${rhoW} * ${getConcreteProperty(Number(concreteStrength)).lambda} * √${concreteStrength} + ${normalForce} * 1000 / (6 * ${width! * depth!})) * ${width} * ${effectiveDepth}) / 1000 = ${concreteShear} tf`;
   }
 
   let resultText:string;

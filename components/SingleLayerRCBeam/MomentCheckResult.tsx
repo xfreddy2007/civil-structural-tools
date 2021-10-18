@@ -1,6 +1,6 @@
 import React from 'react';
 import { css, cx } from '@emotion/css';
-import { md, lg, xl } from '@/libs/utils/break-points';
+import { md, xl } from '@/libs/utils/break-points';
 import { findRebarProperty, rebarSpec } from '@/libs/utils/rebar';
 import { getConcreteProperty, getPhiParam } from '@/libs/utils/concrete';
 import { roundToDigit } from '@/libs/utils/otherUtils';
