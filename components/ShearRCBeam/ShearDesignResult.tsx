@@ -66,7 +66,6 @@ const ShearCheckResult:React.FC<shearResultProps> = ({
     e.preventDefault();
     const data = {
       '箍筋號數': e.target['箍筋號數'].value,
-      '箍筋間距': e.target['箍筋間距'].value,
       '繫筋數量': e.target['繫筋數量'].value === '' ? 0 : +e.target['繫筋數量'].value,
       '繫筋號數': e.target['繫筋號數'].value === '' ? '#4' : e.target['繫筋號數'].value,
     };
@@ -98,22 +97,10 @@ const ShearCheckResult:React.FC<shearResultProps> = ({
   useEffect(() => {
     if (Object.keys(stirrupRebarformData).length > 0) {
       const stirrupArea = 2 * findRebarProperty(stirrupRebarformData['箍筋號數']!)?.area! + stirrupRebarformData['繫筋數量']! * findRebarProperty(stirrupRebarformData['繫筋號數']!)?.area!;
-      setResult(shearVnStrengthCalculation(
-        width!,
-        depth!,
-        effectiveDepth!,
-        normalForce,
-        Number(concreteStrength),
-        Number(rebarStrength),
-        mainRebarArea,
-        stirrupArea,
-        stirrupRebarformData['箍筋間距']!,
-      ));
     } else {
       setResult(null);
     }
-
-  }, [concreteStrength, depth, effectiveDepth, mainRebarArea, normalForce, rebarStrength, stirrupRebarformData, width]);
+  }, []);
 
 
   let VcCrossSectionText:string;
@@ -171,57 +158,55 @@ const ShearCheckResult:React.FC<shearResultProps> = ({
       <div>
         <h5 className="block mb-2">剪力筋設計</h5>
         <p className="block text-green-900 mb-2">計算混凝土剪力強度 Vc</p>
-        <ol className="list-inside block space-y-1">
+        <ol className="list-inside block space-y-1 mb-2">
           <li>依據[土木401-110] 混凝土工程設計規範 設計，混凝土剪力強度公式會由於剪力筋面積不同，而有不同的公式計算方式。設計上假設<span className="text-green-700">{'設計剪力筋面積 Av > 最小需求剪力筋面積 Av,min'}</span> 較為合理。</li>
           <li>{"Vc = √0.53 * λ * √f'c * bw * d 或是 (2.12 * ∛ρw * λ * √f'c + Nu / 6Ag)bw * d，在此取兩者之小值。"}</li>
           <li>{`>> Vc = min(√0.53 * ${getConcreteProperty(Number(concreteStrength)).lambda} * √${concreteStrength} * ${width} * ${effectiveDepth}, (2.12 * ∛${vcResult?.rhoW} * ${getConcreteProperty(Number(concreteStrength)).lambda} * √${concreteStrength} + ${normalForce} * 1000 / (6 * ${width! * depth!})) * ${width} * ${effectiveDepth}) / 1000 = ${vcResult?.concreteShear} tf`}</li>
           <li>{`檢核斷面剪力筋配置上限 5ϕVc = 5 * ${vcResult?.concreteShear} = ${roundToDigit(5 * vcResult?.concreteShear!, 2)} tf ${VcCrossSectionText}`}</li>
         </ol>
-        <form className="w-full flex flex-col px-4 xl:px-8 items-center mb-6" onSubmit={handleSubmitform}>
-          <div className="flex flex-col md:flex-row space-x-0 md:space-x-8 w-full mb-4">
-            <Input
-              id="箍筋號數"
-              name="箍筋號數"
-              title="箍筋號數"
-              isRequired
-              placeholder="ex: #4 or D13"
-              onChange={inputErrorObserver}
-              error={error}
-            />
-            <Input
-              id="箍筋間距"
-              name="箍筋間距"
-              title="箍筋間距"
-              isRequired
-              placeholder="ex: 15 cm"
-              onChange={inputErrorObserver}
-              error={error}
-            />
-            <Input
-              id="繫筋數量"
-              name="繫筋數量"
-              title="繫筋數量"
-              isRequired
-              placeholder="ex: 4"
-              onChange={inputErrorObserver}
-              error={error}
-            />
-            <Input
-              id="繫筋號數"
-              name="繫筋號數"
-              title="繫筋號數"
-              isRequired
-              placeholder="ex: #4 or D13"
-              onChange={inputErrorObserver}
-              error={error}
-            />
-          </div>
-          <div className="flex space-x-4">
-            <button type="submit" className="px-6 md:px-10 py-2 bg-green-900 text-white rounded-md hover:bg-green-700 cursor-pointer font-bold">設計</button>
-            <input type="reset" className="px-6 md:px-10 py-2 bg-green-900 text-white rounded-md hover:bg-green-700 cursor-pointer font-bold" value="重設參數" onClick={() => setStirrupRebarFormData({})}/>
-          </div>
-        </form>
-
+        <p className="block text-green-900 mb-2">計算剪力筋間距比 Av/s</p>
+        <ol className="list-inside block space-y-1 mb-2">
+          <li>折減係數 ϕ: 0.75</li>
+          <li>{`剪力筋所需提供之剪力 Vs = Vu / ϕ - Vc = ${designShear} / 0.75 - ${vcResult?.concreteShear} = ${roundToDigit(designShear! / 0.75 - (vcResult?.concreteShear || 0), 2)} tf`}</li>
+        </ol>
+        {vcResult && <>
+          <p className="block text-green-900 mb-2">剪力筋及繫筋設計</p>
+          <form className="w-full flex flex-col px-4 xl:px-8 items-center mb-6" onSubmit={handleSubmitform}>
+            <div className="flex flex-col md:flex-row space-x-0 md:space-x-8 w-full mb-4">
+              <Input
+                id="箍筋號數"
+                name="箍筋號數"
+                title="箍筋號數"
+                isRequired
+                placeholder="ex: #4 or D13"
+                onChange={inputErrorObserver}
+                error={error}
+              />
+              <Input
+                id="繫筋數量"
+                name="繫筋數量"
+                title="繫筋數量"
+                isRequired
+                placeholder="ex: 4"
+                onChange={inputErrorObserver}
+                error={error}
+              />
+              <Input
+                id="繫筋號數"
+                name="繫筋號數"
+                title="繫筋號數"
+                isRequired
+                placeholder="ex: #4 or D13"
+                onChange={inputErrorObserver}
+                error={error}
+              />
+            </div>
+            <div className="flex space-x-4">
+              <button type="submit" className="px-6 md:px-10 py-2 bg-green-900 text-white rounded-md hover:bg-green-700 cursor-pointer font-bold">設計</button>
+              <input type="reset" className="px-6 md:px-10 py-2 bg-green-900 text-white rounded-md hover:bg-green-700 cursor-pointer font-bold" value="重設參數" onClick={() => setStirrupRebarFormData({})}/>
+            </div>
+          </form>
+      </>}
       </div>
     </div>
   );

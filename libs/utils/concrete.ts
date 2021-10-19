@@ -259,6 +259,19 @@ export const shearVnStrengthCalculation = (
   };
 };
 
+export const stirrupDesign = (
+  width:number,
+  depth:number,
+  effectiveDepth:number,
+  Nu:number = 0,
+  fc:number,
+  fyt:number,
+  as:number,
+  av:number,
+) => {
+
+}
+
 // get minimum beam width function
 const MinimunBeamWidth = [ // unit: cm
   {

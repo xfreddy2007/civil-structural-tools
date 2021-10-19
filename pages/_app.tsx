@@ -2,7 +2,6 @@ import React from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head'
 import '@/stylues/globals.scss';
-
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
 
