@@ -4,6 +4,8 @@ import MenuTab from '../MenuTab';
 import ShearCapacityCheck from './ShearCapacityCheck';
 import ShearCapacityDesign from './ShearCapacityDesign';
 
+import { MathJaxContext } from "better-react-mathjax";
+
 const rootStyle = css``;
 
 const ShearRCBeam:React.FC = () => {
@@ -36,7 +38,7 @@ const ShearRCBeam:React.FC = () => {
           id="shear-rc-beam-menu-capacity-design"
         />
       </div>
-      {pageContent}
+      <MathJaxContext>{pageContent}</MathJaxContext>
     </div>
   );
 };

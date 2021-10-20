@@ -1,3 +1,26 @@
 .form-input-style {
   @apply rounded-md border-gray-300 shadow-sm focus:border-green-700 focus:ring focus:ring-green-500 focus:ring-opacity-50;
 }
+
+// LateX formula text
+.latex-text {
+  line-height: 24px;
+  @media screen and (min-width: 768px) {
+    line-height: 28px;
+  }
+  @media screen and (min-width: 1280px) {
+    line-height: 32px;
+  }
+}
+.latex-formula {
+  span {
+    font-size: 12px;
+    @media screen and (min-width: 768px) {
+      font-size: 14px;
+    }
+    @media screen and (min-width: 1280px) {
+      font-size: 16px;
+      line-height: 2;
+    }
+  }
+}

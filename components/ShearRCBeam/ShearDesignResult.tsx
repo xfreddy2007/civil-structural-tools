@@ -7,6 +7,7 @@ import { stirrupRebarConstraint } from './constraint';
 import { findRebarProperty, rebarSpec, stirrupRebarSpec } from '@/libs/utils/rebar';
 import { getConcreteProperty, getVcStrength, shearVnStrengthCalculation, shearResultDataProps, vcResultDataProps } from '@/libs/utils/concrete';
 import { roundToDigit } from '@/libs/utils/otherUtils';
+import { MathJax } from "better-react-mathjax";
 
 export type shearResultProps = {
   width?: number,
@@ -128,6 +129,8 @@ const ShearCheckResult:React.FC<shearResultProps> = ({
   //   resultText = `ϕVn >= Vu = ${designShear} tf , 此梁剪力強度OK`;
   // }
 
+  const ss = '\\sqrt{100}';
+
   return (
     <div className={cx('block text-left p-4 md:p-8 xl:p-12 rounded-2xl overflow-hidden', rootStyle)}>
       <div className="mb-6">
@@ -168,6 +171,8 @@ const ShearCheckResult:React.FC<shearResultProps> = ({
         <ol className="list-inside block space-y-1 mb-2">
           <li>折減係數 ϕ: 0.75</li>
           <li>{`剪力筋所需提供之剪力 Vs = Vu / ϕ - Vc = ${designShear} / 0.75 - ${vcResult?.concreteShear} = ${roundToDigit(designShear! / 0.75 - (vcResult?.concreteShear || 0), 2)} tf`}</li>
+          <li><MathJax>\({ss}\)</MathJax></li>
+          <li><MathJax>\(ax^2 + bx + c = 0\)</MathJax></li>
         </ol>
         {vcResult && <>
           <p className="block text-green-900 mb-2">剪力筋及繫筋設計</p>
