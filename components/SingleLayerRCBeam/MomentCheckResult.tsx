@@ -4,7 +4,7 @@ import { md, xl } from '@/libs/utils/break-points';
 import { findRebarProperty, rebarSpec } from '@/libs/utils/rebar';
 import { getConcreteProperty, getPhiParam } from '@/libs/utils/concrete';
 import { roundToDigit } from '@/libs/utils/otherUtils';
-import { MathJax, MathJaxContext } from "better-react-mathjax";
+import { MathJaxContext } from "better-react-mathjax";
 import LatexText from '../LatexText';
 
 type momentCheckResultProps = {
@@ -100,27 +100,26 @@ const MomentCheckResult:React.FC<momentCheckResultProps> = ({
           <h5 className="block mb-2">計算過程</h5>
           <p className="block text-green-900 mb-2">彎矩檢核</p>
           <ol className="block space-y-1">
-            <li className="flex space-x-2 flex-wrap my-2">
+            <li className="latex-li">
               <LatexText textType="text">中性軸位置</LatexText>
               <LatexText textType="formula">{"x = \\frac{As \\times f_y}{0.85 \\times f'_c \\times \\beta \\times b}"}</LatexText>
               <LatexText textType="formula">{` = \\frac{${as} \\times ${rebarStrength}}{0.85 \\times ${concreteStrength} \\times ${getConcreteProperty(Number(concreteStrength)).beta} \\times ${width}}`}</LatexText>
               <LatexText textType="formula">{`\\approx ${neuturalDepth}`}</LatexText>
               <LatexText textType="formula">{'cm'}</LatexText>
             </li>
-            <li className="flex space-x-2 flex-wrap my-2">
+            <li className="latex-li">
               <LatexText textType="text">求出最外層鋼筋應變</LatexText>
               <LatexText textType="formula">{`\\varepsilon_t = \\frac{0.003 \\times (d - x)}{x}`}</LatexText>
               <LatexText textType="formula">{`= \\frac{0.003 \\times (${effectiveDepth} - ${neuturalDepth})}{${neuturalDepth}}`}</LatexText>
               <LatexText textType="formula">{`\\approx ${et}`}</LatexText>
               <LatexText textType="text">{etText}</LatexText>
             </li>
-            <li className="flex space-x-2 flex-wrap my-2">
+            <li className="latex-li">
               <LatexText textType="text">求出折減係數</LatexText>
               <LatexText textType="formula">{'\\phi :'}</LatexText>
               <LatexText textType="formula">{phiText}</LatexText>
             </li>
-            <li className="flex space-x-2 flex-wrap my-2">
-              {/* {`此梁之設計彎矩 ϕMn = ϕ * As * Fy * (d - (0.85 * x) / 2) = ${roundToDigit(getPhiParam(et!, 0.005), 2)} * ${as} * ${rebarStrength} * (${effectiveDepth} - (0.85 * ${neuturalDepth}) / 2) / 100000 ≈ ${roundToDigit(getPhiParam(et!, 0.005), 2)} * ${nominalMoment} ≈ ${requiredMoment} tf - m`} */}
+            <li className="latex-li">
               <LatexText textType="text">此梁之設計彎矩</LatexText>
               <LatexText textType="formula">{'\\phi Mn = \\phi \\times As \\times f_y \\times (d - \\frac{0.85 \\times x}{2})'}</LatexText>
               <LatexText textType="formula">{`= ${roundToDigit(getPhiParam(et!, 0.005), 2)} \\times ${as} \\times ${rebarStrength} \\times (${effectiveDepth} - \\frac{0.85 \\times ${neuturalDepth}}{2}) / 100000`}</LatexText>
