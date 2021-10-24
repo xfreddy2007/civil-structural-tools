@@ -95,7 +95,7 @@ const MomentCheckResult:React.FC<momentCheckResultProps> = ({
           <li>{`設計彎矩: ${designMoment} tf - m`}</li>
         </ul>
       </div>
-      <div className="">
+      <div>
         <MathJaxContext>
           <h5 className="block mb-2">計算過程</h5>
           <p className="block text-green-900 mb-2">彎矩檢核</p>

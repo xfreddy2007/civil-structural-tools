@@ -1,9 +1,10 @@
 import React from 'react';
 import { css, cx } from '@emotion/css';
-import { md, lg, xl } from '@/libs/utils/break-points';
-import { findRebarProperty, rebarSpec, stirrupRebarSpec } from '@/libs/utils/rebar';
-import { getConcreteProperty, getPhiParam } from '@/libs/utils/concrete';
-import { roundToDigit } from '@/libs/utils/otherUtils';
+import { md, xl } from '@/libs/utils/break-points';
+import { findRebarProperty, rebarSpec } from '@/libs/utils/rebar';
+import { getConcreteProperty } from '@/libs/utils/concrete';
+import { MathJaxContext } from "better-react-mathjax";
+import LatexText from '../LatexText';
 
 type shearCheckResultProps = {
   width?: number,
@@ -73,22 +74,36 @@ const ShearCheckResult:React.FC<shearCheckResultProps> = ({
   const avTies = (tiesNum || 0) * (findRebarProperty(tiesSpec)?.area || 0);
 
   let VcTitle:string;
-  let VcFormula:string;
+  let VcFormula1:string;
+  let VcFormula1_1:string = '';
+  let VcFormula2:string;
+  let VcFormula2_1:string;
+  let VcFormula2_2:string = '';
   if (avMin && avMin > (avStirrup + avTies)) {
     VcTitle = 'Av < Av,min :';
-    VcFormula = `混凝土剪力強度 Vc = (2.12 * λs * ∛ρw * λ * √f'c + Nu / 6Ag)bw * d = (2.12 * ${lambdaS} * ∛${rhoW} * ${getConcreteProperty(Number(concreteStrength)).lambda} * √${concreteStrength} + ${normalForce} * 1000 / (6 * ${width! * depth!})) * ${width} * ${effectiveDepth} / 1000 = ${concreteShear} tf`;
+    VcFormula1 = `Vc = (2.12 \\lambda_s \\sqrt[3]{\\rho_w} \\lambda \\sqrt{f'_c} + \\frac{N_u}{6A_g})bwd tf`;
+    VcFormula2 = `= (2.12 \\times ${lambdaS} \\times \\sqrt[3]{${rhoW}} \\times ${getConcreteProperty(Number(concreteStrength)).lambda} \\times \\sqrt{${concreteStrength}}`;
+    VcFormula2_1 = `+ \\frac{${normalForce} \\times 1000}{6 \\times ${width! * depth!}}) \\times ${width} \\times ${effectiveDepth} / 1000`;
   } else {
-    VcTitle = 'Av >= Av,min :';
-    VcFormula = `混凝土剪力強度 Vc = √0.53 * λ * √f'c * bw * d 與 (2.12 * ∛ρw * λ * √f'c + Nu / 6Ag)bw * d 取小值 = min(√0.53 * ${getConcreteProperty(Number(concreteStrength)).lambda} * √${concreteStrength} * ${width} * ${effectiveDepth}, (2.12 * ∛${rhoW} * ${getConcreteProperty(Number(concreteStrength)).lambda} * √${concreteStrength} + ${normalForce} * 1000 / (6 * ${width! * depth!})) * ${width} * ${effectiveDepth}) / 1000 = ${concreteShear} tf`;
+    VcTitle = 'Av \\geqq Av,min :';
+    VcFormula1 = `Vc = 0.53 \\lambda \\sqrt{f'_c} bwd`;
+    VcFormula1_1 = `(2.12 \\sqrt[3]{\\rho_w} \\lambda \\sqrt{f'_c} + \\frac{N_u}{6A_g})bwd`
+    VcFormula2 = `= min(0.53\\times${getConcreteProperty(Number(concreteStrength)).lambda}\\times\\sqrt{${concreteStrength}}\\times${width}\\times${effectiveDepth},`;
+    VcFormula2_1 = `(2.12\\times\\sqrt[3]{${rhoW}}\\times${getConcreteProperty(Number(concreteStrength)).lambda}\\times\\sqrt{${concreteStrength}}`;
+    VcFormula2_2 = `+ \\frac{${normalForce}\\times1000}{6\\times${width! * depth!}})\\times${width}\\times${effectiveDepth}) / 1000`;
   }
 
   let resultText:string;
+  let resultText_1:string;
   if (designShear && maximunVu && designShear > maximunVu) {
-    resultText = `Vu > 5ϕVc, 須加大梁尺寸。`
+    resultText = `V_u > 5\\phiV_c,`;
+    resultText_1 = '須加大梁尺寸。';
   } else if (requiredShear && designShear && requiredShear < designShear) {
-    resultText = `ϕVn < Vu = ${designShear} tf , 此梁剪力強度不足，須增加剪力鋼筋量或是加大梁尺寸。`;
+    resultText = `\\phiV_n < V_u = ${designShear} tf,`;
+    resultText_1 = '此梁剪力強度不足，須增加剪力鋼筋量或是加大梁尺寸。';
   } else {
-    resultText = `ϕVn >= Vu = ${designShear} tf , 此梁剪力強度OK`;
+    resultText = `\\phiV_n \\geqq V_u = ${designShear} tf,`;
+    resultText_1 = '此梁剪力強度OK。';
   }
 
   return (
@@ -123,24 +138,80 @@ const ShearCheckResult:React.FC<shearCheckResultProps> = ({
         </ul>
       </div>
       <div>
-        <h5 className="block mb-2">計算過程</h5>
-        <p className="block text-green-900 mb-2">剪力檢核</p>
-        <ol className="list-decimal list-inside block space-y-1">
-          <li>{`求出梁最小剪力鋼筋量 Av,min: 0.2 * √f'c * bw / fyt 與 3.5 * bw / fyt 取大值= Max(0.2 * √${concreteStrength} * ${width} / ${rebarStrength}, * 3.5 * ${width} / ${rebarStrength}) ≈ ${avMin} cm^2`}</li>
-          <li>{`求出尺寸效應修正係數 λs: √2/(1 + d / 25) = √2 / (1 + ${effectiveDepth} / 25) = ${lambdaS}`}</li>
-          <li>{`求出斷面縱向拉力鋼筋比 ρw: As / (bw * d) = ${as} / (${width} * ${effectiveDepth}) = ${rhoW}`}</li>
-          <li className="flex flex-col">
-            <span>計算混凝土提供的剪力強度：</span>
-            <span>{`剪力鋼筋量 Av = 2 * ${avStirrup / 2} + ${tiesNum} * ${findRebarProperty(tiesSpec!)!.area || 0} = ${avStirrup + avTies} cm^2`}</span>
-            <span>{VcTitle}</span>
-            <span>{VcFormula}</span>
-            <span>計算鋼筋提供的剪力強度：</span>
-            <span>{`鋼筋剪力強度 Vs = Av * fyt * d / s = (${avStirrup + avTies} * ${rebarStrength} * ${effectiveDepth} / ${spacing}) / 1000 = ${rebarShear} tf`}</span>
-          </li>
-          <li>折減係數 ϕ: 0.75</li>
-          <li>{`此梁之剪力強度 ϕVn = ϕ * Vn + Vs = 0.75 * ${concreteShear} * ${rebarShear} = 0.75 * ${nominalShear} * ${requiredShear} tf`}</li>
-        </ol>
-        <p>{resultText}</p>
+        <MathJaxContext>
+          <h5 className="block mb-2">計算過程</h5>
+          <p className="block text-green-900 mb-2">剪力檢核</p>
+          <ol className="list-inside block space-y-1">
+            <li className="latex-li">
+              <LatexText textType="text">求出梁最小剪力鋼筋量</LatexText>
+              <LatexText textType="formula">{"Av,min = \\frac{3.5 \\times bw \\times s}{f_y}"}</LatexText>
+              <LatexText textType="text">與</LatexText>
+              <LatexText textType="formula">{"\\frac{0.2 \\times \\sqrt{f'_c} \\times bw \\times s}{f_y}"}</LatexText>
+              <LatexText textType="text">兩者取大值</LatexText>
+              <LatexText textType="formula">{`= Max(\\frac{3.5 \\times ${width} \\times ${spacing}}{${rebarStrength}}, \\frac{0.2 \\times \\sqrt{${concreteStrength}} \\times ${width} \\times ${spacing}}{${rebarStrength}})`}</LatexText>
+              <LatexText textType="formula">{`= ${avMin}`}</LatexText>
+              <LatexText textType="formula">{'cm^{2}'}</LatexText>
+            </li>
+            <li className="latex-li">
+              <LatexText textType="text">求出尺寸效應修正係數</LatexText>
+              <LatexText textType="formula">{"\\lambda_s = \\sqrt{\\frac{2}{1 + \\frac{d}{25}}}"}</LatexText>
+              <LatexText textType="formula">{`= \\sqrt{\\frac{2}{1 + \\frac{${effectiveDepth}}{25}}}`}</LatexText>
+              <LatexText textType="formula">{`= ${lambdaS}`}</LatexText>
+            </li>
+            <li className="latex-li">
+              <LatexText textType="text">求出斷面縱向拉力鋼筋比</LatexText>
+              <LatexText textType="formula">{"\\rho_w = \\frac{A_s}{b_w \\times d}"}</LatexText>
+              <LatexText textType="formula">{`= \\frac{${as}}{${width} \\times ${effectiveDepth}}`}</LatexText>
+              <LatexText textType="formula">{`= ${rhoW}`}</LatexText>
+            </li>
+            <li className="flex flex-col">
+              <span>計算混凝土提供的剪力強度：</span>
+              <span className="ml-2 xl:ml-4 latex-li">
+                <LatexText textType="text">剪力鋼筋量</LatexText>
+                <LatexText textType="formula">{`Av = 2 \\times ${avStirrup / 2} + ${tiesNum} \\times ${findRebarProperty(tiesSpec!)!.area || 0}`}</LatexText>
+                <LatexText textType="formula">{`= ${avStirrup + avTies}`}</LatexText>
+                <LatexText textType="formula">{'cm^{2}'}</LatexText>
+              </span>
+              <span className="ml-2 xl:ml-4"><LatexText textType="formula">{VcTitle}</LatexText></span>
+              <span className="ml-2 xl:ml-4 latex-li">
+                <LatexText textType="text">混凝土剪力強度</LatexText>
+                <LatexText textType="formula">{VcFormula1}</LatexText>
+                {VcFormula1_1 && <LatexText textType="text">與</LatexText>}
+                <LatexText textType="formula">{VcFormula1_1}</LatexText>
+                {VcFormula1_1 && <LatexText textType="text">取小值</LatexText>}
+                <LatexText textType="formula">{VcFormula2}</LatexText>
+                <LatexText textType="formula">{VcFormula2_1}</LatexText>
+                {VcFormula2_2 && <LatexText textType="formula">{VcFormula2_2}</LatexText>}
+                <LatexText textType="formula">{`= ${concreteShear}`}</LatexText>
+                <LatexText textType="formula">{'tf'}</LatexText>
+              </span>
+              <span>計算鋼筋提供的剪力強度：</span>
+              <span className="ml-2 xl:ml-4 latex-li">
+                <LatexText textType="text">鋼筋剪力強度</LatexText>
+                <LatexText textType="formula">{'Vs = \\frac{A_v \\times f_yt \\times d}{s}'}</LatexText>
+                <LatexText textType="formula">{`= \\frac{${avStirrup + avTies} \\times ${rebarStrength} \\times ${effectiveDepth}}{${spacing}} / 1000`}</LatexText>
+                <LatexText textType="formula">{`= ${rebarShear}`}</LatexText>
+                <LatexText textType="text">{'tf'}</LatexText>
+              </span>
+            </li>
+            <li className="latex-li">
+              <LatexText textType="text">折減係數</LatexText>
+              <LatexText textType="formula">{'\\phi: 0.75'}</LatexText>
+            </li>
+            <li className="latex-li">
+              <LatexText textType="text">此梁之剪力強度</LatexText>
+              <LatexText textType="formula">{'\\phi V_n = \\phi \\times (V_n + V_s)'}</LatexText>
+              <LatexText textType="formula">{`= 0.75 \\times (${concreteShear} + ${rebarShear})`}</LatexText>
+              <LatexText textType="formula">{`= 0.75 \\times ${nominalShear}`}</LatexText>
+              <LatexText textType="formula">{`= ${requiredShear}`}</LatexText>
+              <LatexText textType="formula">{'tf'}</LatexText>
+            </li>
+          </ol>
+          <p className="latex-li">
+            <LatexText textType="formula">{resultText}</LatexText>
+            <LatexText textType="formula">{resultText_1}</LatexText>
+          </p>
+        </MathJaxContext>
       </div>
     </div>
   );
