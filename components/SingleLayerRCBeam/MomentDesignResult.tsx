@@ -95,7 +95,7 @@ const MomentDesignResult:React.FC<MomentDesignResultProps> = ({
   }, []);
 
   // design rebar spec and amount
-   // minimum beam width
+  // minimum beam width
   let designedRebarSpec:rebarSpec = '#3';
   let designedRebarAmount:number = 2;
   let usedRebarAmount:number = 2;
@@ -143,7 +143,6 @@ const MomentDesignResult:React.FC<MomentDesignResultProps> = ({
           <ol className="block space-y-1">
             <li>依據[土木401-110] 混凝土工程設計規範定義設計梁均為<span className="text-green-700">拉力控制斷面</span>，因此折減係數ϕ假設為0.9</li>
             <li className="latex-li">
-              {/* {`假設梁有效深度為0.9 * 總梁深度 = 0.9 * ${depth} = ${effectiveDepth} cm`} */}
               <LatexText textType="text">假設梁有效深度為</LatexText>
               <LatexText textType="formula">{'0.9 \\times'}</LatexText>
               <LatexText textType="text">總梁深度</LatexText>
@@ -163,7 +162,6 @@ const MomentDesignResult:React.FC<MomentDesignResultProps> = ({
             </li>
             <li>要滿足設計梁為拉力控制斷面，需定義最大拉力鋼筋量為<span className="text-green-700">當最外層拉力鋼筋應變剛好等於0.005時</span>的鋼筋量</li>
             <li className="latex-li">
-              {/* {`As,max = (Mu / 0.9) / (fy * (d - (0.85 * x) / 2)) = (${designMoment} * 100000 / 0.9) / (${rebarStrength} * (${effectiveDepth} - (0.85 * ${neuturalDepth}) / 2)) = ${asMax} cm^2`} */}
               <LatexText textType="formula">{'As,max = \\frac{Mu / 0.9}{f_y \\times (d - \\frac{0.85 \\times x}{2})}'}</LatexText>
               <LatexText textType="formula">{`= \\frac{${designMoment} \\times 100000 / 0.9}{${rebarStrength} \\times (${effectiveDepth} - \\frac{0.85 \\times ${neuturalDepth}}{2})}`}</LatexText>
               <LatexText textType="formula">{`= ${asMax}`}</LatexText>
@@ -178,14 +176,12 @@ const MomentDesignResult:React.FC<MomentDesignResultProps> = ({
                 <LatexText textType="formula">{`= ${momentParam}`}</LatexText>
               </span>
               <span className="ml-2 xl:ml-4 latex-li">
-                {/* {`材料參數 m = fy / (0.85 * f'c) = ${rebarStrength} / (0.85 * ${concreteStrength}) = ${materialParam}`} */}
                 <LatexText textType="text">材料參數</LatexText>
                 <LatexText textType="formula">{"m = \\frac{f_y}{0.85 \\times f'_c}"}</LatexText>
                 <LatexText textType="formula">{`= \\frac{${rebarStrength}}{0.85 \\times ${concreteStrength}}`}</LatexText>
                 <LatexText textType="formula">{`= ${materialParam}`}</LatexText>
               </span>
               <span className="ml-2 xl:ml-4 latex-li">
-                {/* {`需求拉力鋼筋面積 As,req = (1 / m) * (1 - √(1 - (2 * m * Rn / fy))) * b * d = (1 / ${materialParam}) * (1 - √(1 - (2 * ${materialParam} * ${momentParam} / ${rebarStrength}))) * ${width} * ${effectiveDepth} = ${designRebarArea} cm^2`} */}
                 <LatexText textType="text">需求拉力鋼筋面積</LatexText>
                 <LatexText textType="formula">{"As,req = (\\frac{1}{m}) \\times (1 - \\sqrt{1 - \\frac{2 \\times m \\times Rn}{f_y}}) \\times b \\times d"}</LatexText>
                 <LatexText textType="formula">{`= (\\frac{1}{${materialParam}}) \\times (1 - \\sqrt{1 - \\frac{2 \\times ${materialParam} \\times ${momentParam}}{${rebarStrength}}}) \\times ${width} \\times ${effectiveDepth}`}</LatexText>
@@ -201,7 +197,6 @@ const MomentDesignResult:React.FC<MomentDesignResultProps> = ({
         <MathJaxContext>
           <h5 className="block mb-2">主筋設計</h5>
           <p className="latex-li">
-            {/* {`設計鋼筋量 As: ${usedRebarArea} cm^2`} */}
             <LatexText textType="text">設計鋼筋量 As =</LatexText>
             <LatexText textType="formula">{`${usedRebarArea}`}</LatexText>
             <LatexText textType="formula">{'cm^{2}'}</LatexText>

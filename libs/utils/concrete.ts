@@ -175,6 +175,8 @@ export type vcResultDataProps = null | {
   lambdaS: number,
   rhoW: number,
   concreteShear: number,
+  maxConcreteShear: number,
+  maxSpacingShear: number,
 }
 export const getVcStrength = (
   width:number,
@@ -191,18 +193,24 @@ export const getVcStrength = (
   // 拉力鋼筋比 ρw
   const rhoW = roundToDigit(as / (width * effectiveDepth), 4);
   let Vc:number;
-  const Vc1 = roundToDigit((0.53 * Math.sqrt(fc) + Nu * 1000 / (6 * width * depth)) * width * effectiveDepth, 0);
-  const Vc2 = roundToDigit((2.12 * Math.cbrt(rhoW) * getConcreteProperty(fc).lambda * Math.sqrt(fc) + Nu * 1000 / (6 * width * depth)) * width * effectiveDepth, 0);
-  const VcMax = roundToDigit(1.33 * getConcreteProperty(fc).lambda * Math.sqrt(fc) * width * effectiveDepth, 0);
+  const Vc1 = roundToDigit((0.53 * Math.sqrt(fc) + Nu * 1000 / (6 * width * depth)) * width * effectiveDepth / 1000, 2);
+  const Vc2 = roundToDigit((2.12 * Math.cbrt(rhoW) * getConcreteProperty(fc).lambda * Math.sqrt(fc) + Nu * 1000 / (6 * width * depth)) * width * effectiveDepth / 1000, 2);
+  // 最大混凝土剪力強度
+  const VcMax = roundToDigit(1.33 * getConcreteProperty(fc).lambda * Math.sqrt(fc) * width * effectiveDepth / 1000, 2);
   if (isAvbelowMin) {
-    Vc = roundToDigit(Math.min(lambdaS * Vc2, VcMax)/1000, 2);
+    Vc = Math.min(lambdaS * Vc2, VcMax);
   } else {
-    Vc = roundToDigit(Math.min(Vc1, Vc2, VcMax)/1000,2);
+    Vc = Math.min(Vc1, Vc2, VcMax);
   }
+
+  // S,max Vs = 1.06 * sqrt(f'c) * bw * d
+  const VsSmax = roundToDigit(1.06 * Math.sqrt(fc) * width * effectiveDepth / 1000, 2);
   return {
     lambdaS,
     rhoW,
     concreteShear: Vc,
+    maxConcreteShear: VcMax,
+    maxSpacingShear: VsSmax,
   };
 };
 
@@ -259,17 +267,27 @@ export const shearVnStrengthCalculation = (
   };
 };
 
+// stirrup design
+export type stirrupDesignProps = null | {
+  requiredVs: number,
+  stirrupSpacingRatio: number,
+}
 export const stirrupDesign = (
-  width:number,
-  depth:number,
+  Vu:number,
+  Vn:number,
   effectiveDepth:number,
-  Nu:number = 0,
-  fc:number,
   fyt:number,
-  as:number,
-  av:number,
 ) => {
+  // Required shear strength from rebar Vs
+  const VsReq = roundToDigit(Vu / 0.75 - Vn, 2);
 
+  // designed stirrup spacing ratio Av/s
+  const stirrupSpacingRatio = roundToDigit(VsReq * 1000 / (fyt * effectiveDepth), 3);
+
+  return {
+    requiredVs: VsReq,
+    stirrupSpacingRatio: stirrupSpacingRatio,
+  }
 }
 
 // get minimum beam width function
@@ -368,3 +386,9 @@ export const getMinimumBeamWidth = (mainRebar:mainRebarSpec, stirrup:'D10'|'D13'
   // @ts-ignore
   return stir[stirrup][barNum];
 };
+
+// common stirrup spacing
+export const commonStirrupSpacing = [10, 12, 15, 18, 20, 25];
+export const getSpacingSelectOption = (spacing:number, spacingOption = commonStirrupSpacing):number[] => {
+  return spacingOption.filter((space) => space <= spacing);
+}

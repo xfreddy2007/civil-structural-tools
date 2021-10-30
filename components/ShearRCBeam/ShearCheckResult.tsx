@@ -77,6 +77,7 @@ const ShearCheckResult:React.FC<shearCheckResultProps> = ({
   let VcFormula1:string;
   let VcFormula1_1:string = '';
   let VcFormula2:string;
+  let VcFormula2_0:string = '';
   let VcFormula2_1:string;
   let VcFormula2_2:string = '';
   if (avMin && avMin > (avStirrup + avTies)) {
@@ -86,9 +87,10 @@ const ShearCheckResult:React.FC<shearCheckResultProps> = ({
     VcFormula2_1 = `+ \\frac{${normalForce} \\times 1000}{6 \\times ${width! * depth!}}) \\times ${width} \\times ${effectiveDepth} / 1000`;
   } else {
     VcTitle = 'Av \\geqq Av,min :';
-    VcFormula1 = `Vc = 0.53 \\lambda \\sqrt{f'_c} bwd`;
+    VcFormula1 = `Vc = (0.53 \\lambda \\sqrt{f'_c} + \\frac{N_u}{6A_g})bwd`;
     VcFormula1_1 = `(2.12 \\sqrt[3]{\\rho_w} \\lambda \\sqrt{f'_c} + \\frac{N_u}{6A_g})bwd`
-    VcFormula2 = `= min(0.53\\times${getConcreteProperty(Number(concreteStrength)).lambda}\\times\\sqrt{${concreteStrength}}\\times${width}\\times${effectiveDepth},`;
+    VcFormula2 = `= min((0.53\\times${getConcreteProperty(Number(concreteStrength)).lambda}\\times\\sqrt{${concreteStrength}}`;
+    VcFormula2_0 = `+ \\frac{${normalForce}\\times1000}{6\\times${width! * depth!}})\\times${width}\\times${effectiveDepth},`
     VcFormula2_1 = `(2.12\\times\\sqrt[3]{${rhoW}}\\times${getConcreteProperty(Number(concreteStrength)).lambda}\\times\\sqrt{${concreteStrength}}`;
     VcFormula2_2 = `+ \\frac{${normalForce}\\times1000}{6\\times${width! * depth!}})\\times${width}\\times${effectiveDepth}) / 1000`;
   }
@@ -99,10 +101,10 @@ const ShearCheckResult:React.FC<shearCheckResultProps> = ({
     resultText = `V_u > 5\\phiV_c,`;
     resultText_1 = '須加大梁尺寸。';
   } else if (requiredShear && designShear && requiredShear < designShear) {
-    resultText = `\\phiV_n < V_u = ${designShear} tf,`;
+    resultText = `\\phi V_n < V_u = ${designShear} tf,`;
     resultText_1 = '此梁剪力強度不足，須增加剪力鋼筋量或是加大梁尺寸。';
   } else {
-    resultText = `\\phiV_n \\geqq V_u = ${designShear} tf,`;
+    resultText = `\\phi V_n \\geqq V_u = ${designShear} tf,`;
     resultText_1 = '此梁剪力強度OK。';
   }
 
@@ -180,6 +182,7 @@ const ShearCheckResult:React.FC<shearCheckResultProps> = ({
                 <LatexText textType="formula">{VcFormula1_1}</LatexText>
                 {VcFormula1_1 && <LatexText textType="text">取小值</LatexText>}
                 <LatexText textType="formula">{VcFormula2}</LatexText>
+                {VcFormula2_0 && <LatexText textType="formula">{VcFormula2_0}</LatexText>}
                 <LatexText textType="formula">{VcFormula2_1}</LatexText>
                 {VcFormula2_2 && <LatexText textType="formula">{VcFormula2_2}</LatexText>}
                 <LatexText textType="formula">{`= ${concreteShear}`}</LatexText>
@@ -209,7 +212,7 @@ const ShearCheckResult:React.FC<shearCheckResultProps> = ({
           </ol>
           <p className="latex-li">
             <LatexText textType="formula">{resultText}</LatexText>
-            <LatexText textType="formula">{resultText_1}</LatexText>
+            <LatexText textType="text">{resultText_1}</LatexText>
           </p>
         </MathJaxContext>
       </div>

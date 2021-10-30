@@ -210,17 +210,22 @@ export const stirrupRebarConstraint = {
     },
     type: "stirrupRebarSpecType",
   },
-  '箍筋間距': {
+  '繫筋數量': {
     presence: {
-      allowEmpty: false,
-      message: "為必填項目",
+      allowEmpty: true,
     },
     numericality: {
-      strict: true,
-      greaterThan: 0,
+      strict: false,
+      onlyInteger: true,
       notValid: '必須是一個有效數字',
-      notGreaterThan: '必須大於0',
+      notInteger: '必須是一個正整數'
     },
+  },
+  '繫筋號數': {
+    presence: {
+      allowEmpty: true,
+    },
+    type: "stirrupRebarSpecType",
   },
 };
 

@@ -2,6 +2,10 @@
   @apply rounded-md border-gray-300 shadow-sm focus:border-green-700 focus:ring focus:ring-green-500 focus:ring-opacity-50;
 }
 
+.form-select-style {
+  @apply border-gray-300 shadow-sm focus:border-green-700 focus:ring focus:ring-green-500 focus:ring-opacity-50;
+}
+
 // LateX formula text
 .latex-text {
   line-height: 24px;

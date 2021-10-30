@@ -124,7 +124,7 @@ const rebar = [
   },
 ];
 
-export const findRebarProperty = (size:rebarSpec) => {
+export const findRebarProperty = (size:rebarSpec|stirrupRebarSpec) => {
   if (Object.keys(rebarMapping).findIndex(i => i === size) < 0) return;
   const bar = rebar.find(i => i.size === rebarMapping[size]);
   return {
