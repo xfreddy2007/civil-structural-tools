@@ -27,6 +27,7 @@
 
 // 斷面基礎性質type
 type CrossSectionProps = {
+  section: string;
   height: number;
   width: number;
 }

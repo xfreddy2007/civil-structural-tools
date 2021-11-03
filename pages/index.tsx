@@ -2,10 +2,11 @@ import Head from 'next/head';
 import Main from '@/components/Home/Main';
 import Author from '@/components/Home/Author';
 
-import { findRebarProperty } from '@/libs/utils/rebar';
-import { getMinimumBeamWidth } from '@/libs/utils/concrete';
+import useGetRHBeamSection from '@/libs/hooks/SteelSection/useGetRHBeamSection';
 
 export default function Home() {
+  const sections = useGetRHBeamSection();
+  console.log(sections);
   return (
     <div className="flex-1">
       <Head>
