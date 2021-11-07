@@ -57,8 +57,8 @@ type CorssSectionTorsionSpecProps = {
  * 翼版厚度 tf flangeThick: mm
  * 
  * 扭轉性質：
- * X1: tf/cm^2
- * X2: (cm^2/tf)^2
+ * X1 xOne: tf/cm^2
+ * X2 xTwo: (cm^2/tf)^2
  * 
  * 其他性質：
  * 結實斷面之最高降伏應力 (FyL)p maxStressofCompactSection: tf/cm^2

@@ -17,7 +17,6 @@ const fetcher = (url:string) => axios.get(url).then(res => res.data);
 
 const useFetchdata = (tabName:string):UseFetchdata => {
   const { data, error } = useSWR(`${VERCEL_URL}/${GOOGLESHEET_ID}/${tabName}`, fetcher);
-  console.log(`${VERCEL_URL}/${GOOGLESHEET_ID}/${tabName}`);
   return {
     data,
     error,
