@@ -88,7 +88,3 @@ export type CBeamCrossSectionProps =  CrossSectionProps & CrossSectionSpecProps 
   shearCentroidX: number;
   shearCentroidY: number;
 }
-
-const HBeams = {
-  
-};

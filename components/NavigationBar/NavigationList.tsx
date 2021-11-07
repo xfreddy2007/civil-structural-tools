@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { css, cx } from '@emotion/css';
-import { md, xl } from '@/libs/utils/break-points';
-import pageList, { pageListProps } from '@/libs/utils/pageList';
+import pageList from '@/libs/utils/pageList';
 import NavigationTab from './NavigationTab';
-import { set } from 'lodash';
 
 type NavigationListProps = React.HTMLAttributes<HTMLDivElement> & {
   desktopClassName?: string,
@@ -14,9 +12,7 @@ type NavigationListProps = React.HTMLAttributes<HTMLDivElement> & {
   setOpen: (state:number) => void,
 };
 
-const rootStyle = css`
-
-`;
+const rootStyle = css``;
 
 const NavigationList:React.FC<NavigationListProps> = ({
   desktopClassName,

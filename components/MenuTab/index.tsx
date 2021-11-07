@@ -1,6 +1,6 @@
 import React from 'react';
 import { css, cx } from '@emotion/css';
-import { md, lg, xl } from '@/libs/utils/break-points';
+import { md, xl } from '@/libs/utils/break-points';
 
 type MenuTabProps = React.HTMLAttributes<HTMLButtonElement> & {
   text: string;

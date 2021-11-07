@@ -149,4 +149,4 @@ const Main:React.FC = () => {
   );
 };
 
-export default React.memo(Main);
+export default Main;

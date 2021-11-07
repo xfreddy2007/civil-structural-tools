@@ -43,4 +43,4 @@ const ShearRCBeam:React.FC = () => {
   );
 };
 
-export default React.memo(ShearRCBeam);
+export default ShearRCBeam;

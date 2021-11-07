@@ -6,7 +6,7 @@ import useGetRHBeamSection from '@/libs/hooks/SteelSection/useGetRHBeamSection';
 
 export default function Home() {
   const sections = useGetRHBeamSection();
-  // console.log(sections);
+  console.log(sections);
   return (
     <div className="flex-1">
       <Head>

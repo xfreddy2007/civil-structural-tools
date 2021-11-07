@@ -70,4 +70,4 @@ const Author:React.FC = () => {
   );
 };
 
-export default React.memo(Author);
+export default Author;

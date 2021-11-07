@@ -1,6 +1,5 @@
 import React from 'react';
-import { css, cx } from '@emotion/css';
-import { md, xl } from '@/libs/utils/break-points';
+import { cx } from '@emotion/css';
 import { MathJax } from "better-react-mathjax";
 
 type LatexTextProps = {

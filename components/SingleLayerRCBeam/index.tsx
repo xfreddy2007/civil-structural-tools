@@ -41,4 +41,4 @@ const SingleLayerRCBeam:React.FC = () => {
   );
 };
 
-export default React.memo(SingleLayerRCBeam);
+export default SingleLayerRCBeam;

@@ -119,4 +119,4 @@ const NavigationBar: React.FC = () => {
   );
 };
 
-export default React.memo(NavigationBar);
+export default NavigationBar;

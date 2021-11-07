@@ -1,6 +1,5 @@
 import React from 'react';
 import { css, cx } from '@emotion/css';
-import { md, xl } from '@/libs/utils/break-points';
 import FooterList from './FooterList';
 // @ts-ignore
 import { ReactComponent as FBIcon } from '@/assets/svg/facebook-icon.svg';
@@ -48,4 +47,4 @@ const Footer:React.FC = () => {
   );
 };
 
-export default React.memo(Footer);
+export default Footer;

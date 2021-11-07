@@ -1,13 +1,8 @@
 import React from 'react';
 import { css, cx } from '@emotion/css';
-import { md, xl } from '@/libs/utils/break-points';
 import footerList, { pageProps } from '@/libs/utils/footer-list';
 
-const rootStyle = css`
-  .footer-list {
-
-  }
-`;
+const rootStyle = css``;
 
 type listProps = {
   title: string,
