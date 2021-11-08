@@ -1,8 +1,6 @@
 import useSWR from 'swr';
 import axios from "axios";
 
-import { SteelSectionProps } from '../utils/parseSteelSectionJson';
-
 // use opensheet for data fetching: https://github.com/benborgers/opensheet
 
 const VERCEL_URL = 'https://opensheet.vercel.app';

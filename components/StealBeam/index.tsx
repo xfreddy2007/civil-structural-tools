@@ -22,7 +22,7 @@ const StealBeam:React.FC = () => {
   }
   return (
     <div className={cx('font-bold flex flex-col flex-1 justify-center items-center h-full pt-16 md:pt-20 xl:pt-24 text-center', rootStyle)}>
-      <h2>小梁檢核/設計</h2>
+      <h2>小梁設計</h2>
       <div className="w-full h-12 md:h-16 my-4 md:my-8 xl:my-12">
         <MenuTab 
           text="ASD"
