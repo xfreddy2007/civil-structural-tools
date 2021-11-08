@@ -39,6 +39,9 @@ export const momentConstraints = {
       notGreaterThan: '必須大於0',
     },
   },
+}
+
+const strengthConstaints = {
   '鋼構降伏強度': {
     presence: {
       allowEmpty: false,
